@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AllEvents } from './pages/AllEvents';
 import { Poortjes } from './pages/Poortjes';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   // 1) GET DATA AND PROCESS
@@ -181,7 +182,7 @@ function App() {
     getData();
     const interval = setInterval(() => {
       getData();
-    }, 5000);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, []);
@@ -221,24 +222,22 @@ function App() {
 
   // PAINT THE DOM
   return (
-    <div className='App'>
-      <hr />
-      {/* Date */}
-      <p>{datum}</p>
-      {loading ? (
-        <div>loading...</div>
-      ) : (
-        data &&
-        data.length > 0 &&
-        data.map(event => {
-          // console.log(event);
-          if (event.narrowcastingTonen !== null) {
-            return <AllEvents key={event.id} event={event} />;
-          }
-        })
-      )}
-      <Poortjes data={data} />;
-    </div>
+    <Router>
+      <div className='App'>
+        <hr />
+        {/* Date */}
+        <p>{datum}</p>
+
+        {loading ? (
+          <div>loading...</div>
+        ) : (
+          <Routes>
+            <Route path='/allevents' element={<AllEvents data={data} />} />
+            <Route path='/poortjes' element={<Poortjes data={data} />} />
+          </Routes>
+        )}
+      </div>
+    </Router>
   );
 }
 
