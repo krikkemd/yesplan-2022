@@ -12,7 +12,7 @@ function App() {
   // Local state
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
-  let [showIndex, setShowIndex] = useState(-1);
+  // let [showIndex, setShowIndex] = useState(-1);
   const urls = [
     'http://10.0.209.29:5000/showtimedata',
     'http://10.0.209.29:5000/ncdata',
@@ -176,30 +176,12 @@ function App() {
     });
   };
 
-  // useEffect to determine which event to show
-  useEffect(() => {
-    if (data && data.length) {
-      console.log(data.length);
-
-      if (showIndex < data.length) {
-        setShowIndex(++showIndex);
-        console.log(`showIndex: ${showIndex}`);
-      }
-
-      if (showIndex === data.length) {
-        console.log('reset showIndex');
-        setShowIndex(0);
-        console.log(`showIndex: ${showIndex}`);
-      }
-    }
-  }, [data]);
-
   // Get all data interval
   useEffect(() => {
     getData();
     const interval = setInterval(() => {
       getData();
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -243,20 +225,19 @@ function App() {
       <hr />
       {/* Date */}
       <p>{datum}</p>
-
       {loading ? (
         <div>loading...</div>
       ) : (
-        // data &&
-        // data.length > 0 &&
-        // data.map(event => {
-        //   // console.log(event);
-        //   if (event.narrowcastingTonen !== null) {
-        //     return <AllEvents key={event.id} event={event} />;
-        //   }
-        // })
-        <Poortjes data={data} showIndex={showIndex} />
+        data &&
+        data.length > 0 &&
+        data.map(event => {
+          // console.log(event);
+          if (event.narrowcastingTonen !== null) {
+            return <AllEvents key={event.id} event={event} />;
+          }
+        })
       )}
+      <Poortjes data={data} />;
     </div>
   );
 }
