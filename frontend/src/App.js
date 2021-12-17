@@ -16,6 +16,7 @@ function App() {
     'http://10.0.209.29:5000/ncimages',
   ];
 
+  // get all data from urls above
   const getData = async () => {
     const promiseArray = urls.map(async url => {
       const data = await fetch(url, {
@@ -39,7 +40,9 @@ function App() {
 
       let timeObj = {};
       let ncObj = {};
+      let finalArray = [];
 
+      // Extract values from the data and create an array(times) of objects
       const times = values[0].data.map(value => {
         const name = value.name;
         const id = value.id;
@@ -48,16 +51,19 @@ function App() {
         const location = value.locations[0].name;
         const profile = value.profile.name;
 
-        return (timeObj = {
+        timeObj = {
           id,
           name,
           start,
           end,
           location,
           profile,
-        });
+        };
+
+        return timeObj;
       });
 
+      // Extract values from the data and create an array(nc) of objects
       const nc = values[1].data.map(show => {
         const id = show.event.id;
         const narrowcastingUitvoerende = show.items.narrowcasting_uitvoerende;
@@ -73,7 +79,6 @@ function App() {
           show.items.voorstellingsbegeleider_voorstellingsbegeleider1?.contact?.name ||
           show.items.voorstellingsbegeleider_voorstellingsbegeleider1?.contact?.person?.name;
 
-        // if (uitvoerende && titel && voorstellingsbegeleider)
         ncObj = {
           id,
           narrowcastingUitvoerende,
@@ -104,10 +109,7 @@ function App() {
         return ncObj;
       });
 
-      // console.log(times);
-      // console.log(nc);
-
-      let finalArray = [];
+      // Combine the times array with the nc array (finalArray)
       times.map(el => {
         nc.map(val => {
           if (el.id === val.id) {
@@ -118,6 +120,8 @@ function App() {
 
       let imgArray = [];
 
+      // values[2] is an array which containes the server image paths, which are downloaded from yesplan: http://10.0.209.29:5000/imageName
+      // Push the image names without the server path to the imgArray
       if (values[2].length > 0) {
         values[2].map(img => {
           let test = img.split('/');
@@ -128,9 +132,11 @@ function App() {
 
       console.log(imgArray);
 
+      // compare the imgArray values to the ncOriginalNames
       finalArray.map(el => {
         imgArray.map(img => {
           if (el.narrowcastingOriginalName === img) {
+            // if the values match, add the server path in front of the name so we can query it with getImageBlobs()
             console.log(true);
             el.narrowcastingOriginalName =
               'http://10.0.209.29:5000/' + encodeURIComponent(`${img}`);
@@ -140,6 +146,7 @@ function App() {
 
       console.log(finalArray);
 
+      // query the narrowcasting images and add them to promises. wait for the .map loop to complete before Promise.all()
       (async () => {
         const promises = finalArray.map(async event => {
           if (event.narrowcastingOriginalName) {
@@ -156,7 +163,7 @@ function App() {
         //   'source: https://lavrton.com/javascript-loops-how-to-handle-async-await-6252dd3c795/',
         // );
 
-        // 4) Sort finalarray array by start times
+        // 4) Sort finalarray array by event start times
         finalArray = finalArray.sort((a, b) => {
           return a.start < b.start ? -1 : a.start > b.start ? 1 : 0;
         });
@@ -219,6 +226,7 @@ function App() {
       {loading ? (
         <div>loading...</div>
       ) : (
+        data &&
         data.length > 0 &&
         data.map(event => {
           // console.log(event);
@@ -233,7 +241,7 @@ function App() {
                   {event.narrowcastingTonen}
                 </div>
                 <div>{event.location}</div>
-                <div>{event.titel}</div>
+                <div>{event.narrowcastingTitel}</div>
                 <div style={{ fontWeight: 'bold' }}>{event.uitvoerende}</div>
                 <div>{event.start}</div>
                 <div>{event.end}</div>
