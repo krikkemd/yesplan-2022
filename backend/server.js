@@ -28,37 +28,6 @@ const fs = require('fs');
 const sharp = require('sharp');
 require('dotenv').config();
 
-const d = new Date();
-let day = new Date().getDate();
-let month = new Date().getMonth() + 1;
-let year = new Date().getFullYear();
-let time = new Date().toLocaleTimeString();
-
-// console.log(`${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}`);
-
-setInterval(() => {
-  time = new Date().toLocaleTimeString();
-  day = new Date().getDate();
-  month = new Date().getMonth() + 1;
-  year = new Date().getFullYear();
-}, 1000);
-
-setInterval(() => {
-  console.log(`${day}-${month}-${year}-${time}`);
-}, 1000 * 60 * 60);
-
-const yesterday = `${day - 1}-${month}-${year}`;
-const test = '24-11-2021';
-const today = `${day}-${month}-${year}`;
-console.log(`Hi! today is ${today}`);
-
-// Events today: hier ontvangen we de tijden (onderdaan meer query urls)
-const showTimeQuery = `https://denieuwekolk.yesplan.nl/api/events/date:${today}(status:definitief)?api_key=${process.env.API_KEY}`;
-
-// Customdata: Hier ontvangen we de overige NC data (onderdaan meer query urls)
-const ncDataQuery = `https://denieuwekolk.yesplan.nl/api/events/date:${today}(status:definitief) /customdata?=&valuesonly&api_key=${process.env.API_KEY}`;
-const ncImageQuery = `https://denieuwekolk.yesplan.nl/api/events/date:${today}(status:definitief) /customdata?=&valuesonly&api_key=${process.env.API_KEY}`;
-
 const sharpImage = async (width, height, imagePath, outputPath) => {
   await sharp(imagePath, { failOnError: false })
     .resize(width, height)
@@ -82,7 +51,7 @@ const emptyDir = directory => {
 };
 
 app.get('/', (req, res, next) => {
-  res.send('ok');
+  res.send('Hello World');
 });
 
 // Middleware
@@ -119,7 +88,9 @@ app.use(xssClean());
 app.use(express.static('images'));
 // app.use(express.static('temp'));
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ROUTES
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Events today: hier ontvangen we de tijden (onderdaan meer query urls)
 app.post('/showtimedata', async (req, res) => {
@@ -246,33 +217,3 @@ process.on('unhandledRejection', err => {
 
 // Listen
 server.listen(port, () => console.log(`hello, listening on port: ${port}`));
-
-//  URLS
-// All events today
-// tijdenUrl = `https://denieuwekolk.yesplan.nl/api/events/date:${today}(status:definitief)?api_key=${process.env.API_KEY}`;
-
-// Rabo zaal 30-4-2020
-// url = 'https://denieuwekolk.yesplan.nl/api/events/date%3A30-04-2020%20%28status%3Adefinitief%29%20%28location%3A%20rabo%29?api_key=${process.env.API_KEY}';
-
-// alle events op 30-4-2020
-// url =
-//   'https://denieuwekolk.yesplan.nl/api/events/date%3A%23today%20%28status%3Adefinitief%29?api_key=${process.env.API_KEY}';
-
-// const url =
-//   'https://denieuwekolk.yesplan.nl/api/events/date%3A%23today%28status%3Adefinitief%29%20%28location%3Arabo%29/customdata?keywords=narrowcasting_voorstelling,narrowcasting_afbeelding,kleedkamerindeling,voorstellingsbegeleider_voorstellingsbegeleider1,interneinformatietijden&api_key=${process.env.API_KEY}';
-
-// KEYWORDS RABO
-// const url = `https://denieuwekolk.yesplan.nl/api/events/date:${today}(status:definitief) (location:grote)/customdata?keywords=narrowcasting_voorstelling,narrowcasting_afbeelding,kleedkamerindeling,voorstellingsbegeleider_voorstellingsbegeleider1,interneinformatietijden&api_key=${process.env.API_KEY}`;
-
-// const url =
-//   'https://denieuwekolk.yesplan.nl/api/events/date:21-10-2021(status:definitief) /customdata?keywords=narrowcasting_voorstelling,narrowcasting_afbeelding,kleedkamerindeling,voorstellingsbegeleider_voorstellingsbegeleider1,interneinformatietijden&api_key=${process.env.API_KEY}';
-
-// GROUPS
-// const url =
-//   'https://denieuwekolk.yesplan.nl/api/events/date:21-10-2021(status:definitief) /customdata?=narrowcasting_voorstelling,narrowcasting_afbeelding,kleedkamerindeling,voorstellingsbegeleider_voorstellingsbegeleider1,interneinformatietijden&api_key=${process.env.API_KEY}';
-
-// VALUES ONLY
-// const valuesUrl = `https://denieuwekolk.yesplan.nl/api/events/date:${today}(status:definitief) /customdata?=&valuesonly&api_key=${process.env.API_KEY}`;
-
-// const url =
-//   'https://denieuwekolk.yesplan.nl/api/events/date:21-10-2021/customdata?keywords=narrowcasting_afbeelding&api_key=${process.env.API_KEY}';
