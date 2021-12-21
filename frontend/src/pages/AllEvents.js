@@ -9,7 +9,7 @@ export const AllEvents = ({ data }) => {
       // if (event.narrowcastingTonen !== null) {
       return (
         <div key={event.id}>
-          <div>{event.id}</div>
+          {/* <div>{event.id}</div> */}
           <div>{event.profile}</div>
           <div style={{ color: 'blue' }}>{event.name}</div>
           <div style={{ color: event.narrowcastingTonen === 'Voorstelling' ? 'red' : 'green' }}>

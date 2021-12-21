@@ -165,10 +165,10 @@ app.post('/ncimages', async (req, res) => {
                   .pipe(fs.createWriteStream(temp_path))
                   .on('finish', async () => {
                     if (image.ncTonen === 'Voorstelling') {
-                      await sharpImage(400, 400, temp_path, output_path);
+                      await sharpImage(1920, 1080, temp_path, output_path);
                     }
                     if (image.ncTonen === 'Evenement') {
-                      await sharpImage(150, 150, temp_path, output_path);
+                      await sharpImage(1080, 1920, temp_path, output_path);
                     }
                     if (image.ncTonen === null) {
                       console.log('ncTonen is leeg');

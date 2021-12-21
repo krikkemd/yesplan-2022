@@ -182,7 +182,7 @@ function App() {
     getData();
     const interval = setInterval(() => {
       getData();
-    }, 60000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
@@ -224,9 +224,9 @@ function App() {
   return (
     <Router>
       <div className='App'>
-        <hr />
+        {/* <hr /> */}
         {/* Date */}
-        <p>{datum}</p>
+        {/* <p>{datum}</p> */}
 
         {loading ? (
           <div>loading...</div>
