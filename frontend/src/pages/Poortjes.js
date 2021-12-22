@@ -26,15 +26,25 @@ export const Poortjes = ({ data }) => {
 
   return shows && shows.length ? (
     <div>
-      <img
-        style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}
-        src={shows[showIndex]?.narrowcastingOriginalName}></img>
       {/* <img
         style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}
-        src={`http://10.0.209.29:5000/${encodeURIComponent(shows[showIndex]?.narrowcastingOriginalName)}`}></img> */}
+        src={localStorage.getItem(
+          `${shows[showIndex]?.narrowcastingOriginalName}-${shows[showIndex]?.narrowcastingTonen}`,
+        )}></img> */}
+      {/* <img
+        style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}
+        src={localStorage.getItem(
+          `${shows[showIndex]?.narrowcastingOriginalName}-${shows[showIndex]?.narrowcastingTonen}`,
+        )}></img> */}
+      <img
+        style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}
+        src={`http://10.0.209.29:5000/${encodeURIComponent(
+          shows[showIndex]?.narrowcastingTonen + '-' + shows[showIndex]?.narrowcastingOriginalName,
+        )}`}></img>
       <div className={'image-overlay'}></div>
       <div className='text-container-blue'>
         <div className={'text'}>{shows[showIndex]?.location}</div>
+        <div className={'text'}>{shows[showIndex]?.narrowcastingTonen}</div>
         <div className={'text'}>{shows[showIndex]?.narrowcastingTitel}</div>
       </div>
     </div>

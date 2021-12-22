@@ -17,7 +17,7 @@ function App() {
   const urls = [
     'http://10.0.209.29:5000/showtimedata',
     'http://10.0.209.29:5000/ncdata',
-    'http://10.0.209.29:5000/ncimages',
+    // 'http://10.0.209.29:5000/ncimages',
   ];
 
   // get all data from urls above
@@ -126,61 +126,82 @@ function App() {
 
       // values[2] is an array which containes the server image paths, which are downloaded from yesplan: http://10.0.209.29:5000/imageName
       // Push the image names without the server path to the imgArray
-      if (values[2].length > 0) {
-        values[2].map(img => {
-          let test = img.split('/');
-          let oke = test[test.length - 1].split('%20').join(' ');
-          imgArray.push(oke);
-        });
-      }
+      // if (values[2].length > 0) {
+      //   values[2].map(img => {
+      //     let test = img.split('/');
+      //     let oke = test[test.length - 1].split('%20').join(' ');
+      //     imgArray.push(oke);
+      //   });
+      // }
 
-      console.log(imgArray);
+      // console.log(imgArray);
 
-      // compare the imgArray values to the ncOriginalNames
-      finalArray.map(el => {
-        imgArray.map(img => {
-          if (el.narrowcastingOriginalName === img) {
-            // if the values match, add the server path in front of the name so we can query it with getImageBlobs()
-            console.log(true);
-            el.narrowcastingOriginalName =
-              'http://10.0.209.29:5000/' + encodeURIComponent(`${img}`);
-          }
-        });
-      });
+      // // compare the imgArray values to the ncOriginalNames
+      // finalArray.map(el => {
+      //   imgArray.map(img => {
+      //     if (el.narrowcastingOriginalName === img) {
+      //       // if the values match, add the server path in front of the name so we can query it with getImageBlobs()
+      //       console.log(true);
+      //       el.narrowcastingOriginalName =
+      //         'http://10.0.209.29:5000/' + encodeURIComponent(`${img}`);
+
+      //       let test = localStorage.getItem(
+      //         'http://10.0.209.29:5000/' + encodeURIComponent(`${img}-${el.narrowcastingTonen}`),
+      //       );
+      //       console.log(test);
+
+      //       if (test === null || test !== el.narrowcastingOriginalName) {
+      //         console.log('SET ITEM 🎈');
+      //         localStorage.setItem(
+      //           'http://10.0.209.29:5000/' + encodeURIComponent(`${img}-${el.narrowcastingTonen}`),
+      //           'http://10.0.209.29:5000/' + encodeURIComponent(`${img}`),
+      //         );
+      //       }
+      //     }
+      //   });
+      // });
 
       console.log(finalArray);
 
       // query the narrowcasting images and add them to promises. wait for the .map loop to complete before Promise.all()
-      (async () => {
-        const promises = finalArray.map(async event => {
-          if (event.narrowcastingOriginalName) {
-            return (event.narrowcastingOriginalName = await getImageBlobs(
-              event.narrowcastingOriginalName,
-            ));
-          }
-        });
+      // (async () => {
+      //   const promises = finalArray.map(async event => {
+      //     if (event.narrowcastingOriginalName) {
+      //       return (event.narrowcastingOriginalName = await getImageBlobs(
+      //         event.narrowcastingOriginalName,
+      //       ));
+      //     }
+      //   });
 
-        await Promise.all(promises);
+      //   await Promise.all(promises);
+      //   // .then(res => {
+      //   //   console.log(res);
+      //   //   const lol = res.filter(res => res !== undefined && res);
+      //   //   console.log(lol);
+      //   //   lol.map(r => localStorage.setItem(`${r}`, r));
+      //   // });
 
-        console.log('all promises done, waited for loop to complete!');
-        // console.log(
-        //   'source: https://lavrton.com/javascript-loops-how-to-handle-async-await-6252dd3c795/',
-        // );
+      //   console.log('all promises done, waited for loop to complete!');
+      //   // console.log(
+      //   //   'source: https://lavrton.com/javascript-loops-how-to-handle-async-await-6252dd3c795/',
+      //   // );
 
-        // 4) Sort finalarray array by event start times
-        finalArray = finalArray.sort((a, b) => {
-          return a.start < b.start ? -1 : a.start > b.start ? 1 : 0;
-        });
-        setData(finalArray);
-        setLoading(false);
-      })();
+      //   // 4) Sort finalarray array by event start times
+      //   finalArray = finalArray.sort((a, b) => {
+      //     return a.start < b.start ? -1 : a.start > b.start ? 1 : 0;
+      //   });
+      // })();
+      setData(finalArray);
+      setLoading(false);
     });
   };
 
   // Get all data interval
   useEffect(() => {
+    // localStorage.clear();
     getData();
     const interval = setInterval(() => {
+      // localStorage.clear();
       getData();
     }, 10000);
 
@@ -196,6 +217,7 @@ function App() {
 
     const data = await res.blob();
     const blob = await URL.createObjectURL(data);
+    // localStorage.setItem('blob', blob);
     // console.log(blob);
     // setBlob(blob);
     return blob;
