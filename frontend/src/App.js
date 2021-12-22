@@ -8,17 +8,12 @@ function App() {
   // Data Query Urls:
   const showTimeQuery = 'http://10.0.209.29:5000/showtimedata'; // alle data omtrent tijden van voorstellingen
   const narrowcastingQuery = 'http://10.0.209.29:5000/ncdata'; // valuesOnly query, een hele bak yesplan data incl. NC
-  const narrowcastingImages = 'http://10.0.209.29:5000/ncimages'; // used serverside to save nc images to disk
 
   // Local state
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
-  // let [showIndex, setShowIndex] = useState(-1);
-  const urls = [
-    'http://10.0.209.29:5000/showtimedata',
-    'http://10.0.209.29:5000/ncdata',
-    // 'http://10.0.209.29:5000/ncimages',
-  ];
+
+  const urls = ['http://10.0.209.29:5000/showtimedata', 'http://10.0.209.29:5000/ncdata'];
 
   // get all data from urls above
   const getData = async () => {
@@ -122,75 +117,8 @@ function App() {
         });
       });
 
-      let imgArray = [];
-
-      // values[2] is an array which containes the server image paths, which are downloaded from yesplan: http://10.0.209.29:5000/imageName
-      // Push the image names without the server path to the imgArray
-      // if (values[2].length > 0) {
-      //   values[2].map(img => {
-      //     let test = img.split('/');
-      //     let oke = test[test.length - 1].split('%20').join(' ');
-      //     imgArray.push(oke);
-      //   });
-      // }
-
-      // console.log(imgArray);
-
-      // // compare the imgArray values to the ncOriginalNames
-      // finalArray.map(el => {
-      //   imgArray.map(img => {
-      //     if (el.narrowcastingOriginalName === img) {
-      //       // if the values match, add the server path in front of the name so we can query it with getImageBlobs()
-      //       console.log(true);
-      //       el.narrowcastingOriginalName =
-      //         'http://10.0.209.29:5000/' + encodeURIComponent(`${img}`);
-
-      //       let test = localStorage.getItem(
-      //         'http://10.0.209.29:5000/' + encodeURIComponent(`${img}-${el.narrowcastingTonen}`),
-      //       );
-      //       console.log(test);
-
-      //       if (test === null || test !== el.narrowcastingOriginalName) {
-      //         console.log('SET ITEM 🎈');
-      //         localStorage.setItem(
-      //           'http://10.0.209.29:5000/' + encodeURIComponent(`${img}-${el.narrowcastingTonen}`),
-      //           'http://10.0.209.29:5000/' + encodeURIComponent(`${img}`),
-      //         );
-      //       }
-      //     }
-      //   });
-      // });
-
       console.log(finalArray);
 
-      // query the narrowcasting images and add them to promises. wait for the .map loop to complete before Promise.all()
-      // (async () => {
-      //   const promises = finalArray.map(async event => {
-      //     if (event.narrowcastingOriginalName) {
-      //       return (event.narrowcastingOriginalName = await getImageBlobs(
-      //         event.narrowcastingOriginalName,
-      //       ));
-      //     }
-      //   });
-
-      //   await Promise.all(promises);
-      //   // .then(res => {
-      //   //   console.log(res);
-      //   //   const lol = res.filter(res => res !== undefined && res);
-      //   //   console.log(lol);
-      //   //   lol.map(r => localStorage.setItem(`${r}`, r));
-      //   // });
-
-      //   console.log('all promises done, waited for loop to complete!');
-      //   // console.log(
-      //   //   'source: https://lavrton.com/javascript-loops-how-to-handle-async-await-6252dd3c795/',
-      //   // );
-
-      //   // 4) Sort finalarray array by event start times
-      //   finalArray = finalArray.sort((a, b) => {
-      //     return a.start < b.start ? -1 : a.start > b.start ? 1 : 0;
-      //   });
-      // })();
       setData(finalArray);
       setLoading(false);
     });
@@ -198,30 +126,13 @@ function App() {
 
   // Get all data interval
   useEffect(() => {
-    // localStorage.clear();
     getData();
     const interval = setInterval(() => {
-      // localStorage.clear();
       getData();
     }, 10000);
 
     return () => clearInterval(interval);
   }, []);
-
-  const getImageBlobs = async url => {
-    console.log('running getImageBlob');
-    const res = await fetch(url, {
-      method: 'GET',
-      credentials: 'include',
-    });
-
-    const data = await res.blob();
-    const blob = await URL.createObjectURL(data);
-    // localStorage.setItem('blob', blob);
-    // console.log(blob);
-    // setBlob(blob);
-    return blob;
-  };
 
   let d = new Date();
   let days = ['ZO', 'MA', 'DI', 'WO', 'DO', 'VR', 'ZA'];

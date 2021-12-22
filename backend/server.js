@@ -153,55 +153,34 @@ const saveImagesToServer = async () => {
       // if there are no images uploaded, return "no images uploaden"
       if (urls.length > 0) {
         // initialize an array which will hold all the image promises
-        let promiseArray = [];
         urls.map(image => {
-          // console.log(image);
           const temp_path = `./temp/${image.ncTonen}-${image.filename}`;
           const folder_path = `./images/`;
           const file_name = `${image.ncTonen}-${image.filename}`;
           const output_path = `${folder_path}${file_name}`;
 
-          const imagePromise = axios
-            .get(image.dataurl, { responseType: 'stream' })
-            .then(async res => {
-              const imageLocation = await new Promise((resolve, reject) => {
-                res.data
-                  .pipe(fs.createWriteStream(temp_path))
-                  .on('finish', async () => {
-                    // if (image.ncTonen === 'Voorstelling' && !fs.existsSync(output_path)) {
-                    //   console.log('sharp');
-                    //   await sharpImage(1920, 1080, temp_path, output_path);
-                    // }
-                    // if (image.ncTonen === 'Evenement' && !fs.existsSync(output_path)) {
-                    //   await sharpImage(1080, 1920, temp_path, output_path);
-                    // }
-                    // if (image.ncTonen === null) {
-                    //   console.log('ncTonen is leeg');
-                    //   await sharpImage(150, 150, temp_path, output_path);
-                    // }
+          axios.get(image.dataurl, { responseType: 'stream' }).then(async res => {
+            await new Promise((resolve, reject) => {
+              res.data
+                .pipe(fs.createWriteStream(temp_path))
+                .on('finish', async () => {
+                  if (image.ncTonen === 'Voorstelling' && !fs.existsSync(output_path)) {
+                    console.log('sharp');
+                    await sharpImage(1920, 1080, temp_path, output_path);
+                  }
+                  if (image.ncTonen === 'Evenement' && !fs.existsSync(output_path)) {
+                    await sharpImage(1080, 1920, temp_path, output_path);
+                  }
+                  if (image.ncTonen === null) {
+                    console.log('ncTonen is leeg');
+                    await sharpImage(150, 150, temp_path, output_path);
+                  }
 
-                    resolve(temp_path); // when the createWriteSteam is finished -> resolve the promise returning the path where the img is located
-                  })
-                  .on('error', e => reject(e));
-              });
-              // console.log(imageLocation);
-              let readSavedImageLocation = fs.createReadStream(imageLocation); // create a readable stream from the just saved img
-
-              // return readSavedImageLocation.path; // this returns the value to the .then imagePromise
-              return 'http://10.0.209.29:5000/' + encodeURIComponent(`${image.filename}`); // this returns the value to the .then imagePromise
+                  resolve(temp_path); // when the createWriteSteam is finished -> resolve the promise returning the path where the img is located
+                })
+                .on('error', e => reject(e));
             });
-          // console.log(imagePromise);
-          // promiseArray.push(imagePromise);
-          // console.log(promiseArray);
-          promiseArray = [...promiseArray, imagePromise]; // add the imagePromise to the promiseArray
-        });
-        // console.log(promiseArray);
-
-        // Return the values of the returned promises (imagePromise)
-        Promise.all(promiseArray).then(async values => {
-          console.log('1');
-          await sharpImageToImagesFolder();
-          console.log('5');
+          });
         });
       } else {
         console.log('No images uploaded');
@@ -214,142 +193,7 @@ const saveImagesToServer = async () => {
 
 setInterval(() => {
   saveImagesToServer();
-}, 50000);
-
-// app.post('/ncimages', async (req, res) => {
-//   let data;
-//   await axios
-//     .get(
-//       `https://denieuwekolk.yesplan.nl/api/events/date:${req.body.date}(status:definitief) /customdata?=&valuesonly&api_key=${process.env.API_KEY}`,
-//     )
-//     .then(async res => {
-//       data = await res.data;
-
-//       const imageUrls = [];
-//       // console.log(data);
-
-//       // Only keep events with narrowcasting_afbeelding !== null
-//       const onlyEventsWithImages = data.data.filter(
-//         show => show.items.narrowcasting_afbeelding !== null,
-//       );
-//       // console.log(onlyEventsWithImages);
-
-//       // Store all image urls and filenames inside its own array
-//       onlyEventsWithImages.map(event => {
-//         imageUrls.push({
-//           filename: event.items.narrowcasting_afbeelding.originalname,
-//           ncTonen: event.items.narrowcasting_tonen,
-//           dataurl: event.items.narrowcasting_afbeelding.dataurl + `?api_key=${process.env.API_KEY}`,
-//         });
-//       });
-
-//       return imageUrls;
-//     })
-//     .then(urls => {
-//       // if there are no images uploaded, return "no images uploaden"
-//       if (urls.length > 0) {
-//         // initialize an array which will hold all the image promises
-//         let promiseArray = [];
-//         urls.map(image => {
-//           // console.log(image);
-//           const temp_path = `./temp/${image.ncTonen}-${image.filename}`;
-//           const folder_path = `./images/`;
-//           const file_name = `${image.ncTonen}-${image.filename}`;
-//           const output_path = `${folder_path}${file_name}`;
-
-//           const imagePromise = axios
-//             .get(image.dataurl, { responseType: 'stream' })
-//             .then(async res => {
-//               const imageLocation = await new Promise((resolve, reject) => {
-//                 res.data
-//                   .pipe(fs.createWriteStream(temp_path))
-//                   .on('finish', async () => {
-//                     // if (image.ncTonen === 'Voorstelling' && !fs.existsSync(output_path)) {
-//                     //   console.log('sharp');
-//                     //   await sharpImage(1920, 1080, temp_path, output_path);
-//                     // }
-//                     // if (image.ncTonen === 'Evenement' && !fs.existsSync(output_path)) {
-//                     //   await sharpImage(1080, 1920, temp_path, output_path);
-//                     // }
-//                     // if (image.ncTonen === null) {
-//                     //   console.log('ncTonen is leeg');
-//                     //   await sharpImage(150, 150, temp_path, output_path);
-//                     // }
-
-//                     resolve(temp_path); // when the createWriteSteam is finished -> resolve the promise returning the path where the img is located
-//                   })
-//                   .on('error', e => reject(e));
-//               });
-//               // console.log(imageLocation);
-//               let readSavedImageLocation = fs.createReadStream(imageLocation); // create a readable stream from the just saved img
-
-//               // return readSavedImageLocation.path; // this returns the value to the .then imagePromise
-//               return 'http://10.0.209.29:5000/' + encodeURIComponent(`${image.filename}`); // this returns the value to the .then imagePromise
-//             });
-//           // console.log(imagePromise);
-//           // promiseArray.push(imagePromise);
-//           // console.log(promiseArray);
-//           promiseArray = [...promiseArray, imagePromise]; // add the imagePromise to the promiseArray
-//         });
-//         // console.log(promiseArray);
-
-//         // Return the values of the returned promises (imagePromise)
-//         Promise.all(promiseArray).then(async values => {
-//           // console.log(values);
-//           // let aantalImages = values.length;
-
-//           console.log('1');
-//           await sharpImageToImagesFolder();
-//           console.log('5');
-//           res.json(values);
-//         });
-//       } else {
-//         res.json({ status: 'No images uploaded' });
-//       }
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// });
-
-const sharpImageToImagesFolder = async () => {
-  const temp_path = path.join(__dirname, 'temp');
-  const image_path = path.join(__dirname, 'images');
-  let promises = [];
-
-  const pt = await new Promise((resolve, reject) => {
-    fs.readdir(temp_path, (err, files) => {
-      if (err) return console.log(err);
-
-      fs.readdir(image_path, (err, images) => {
-        if (err) return console.log(err);
-
-        if (files.toString() !== images.toString()) {
-          console.log('not equal');
-          let test = files.map(async file => {
-            // console.log(file);
-            // console.log(`${temp_path}${file}`);
-            if (file.includes('Voorstelling')) {
-              return await sharpImage(1920, 1080, `${temp_path}/${file}`, `${image_path}/${file}`);
-            }
-            if (file.includes('Evenement')) {
-              return await sharpImage(1080, 1920, `${temp_path}/${file}`, `${image_path}/${file}`);
-            }
-          });
-          resolve(test);
-        } else {
-          console.log('equal');
-          resolve(images);
-        }
-      });
-    });
-  });
-
-  console.log('2');
-  // return pt;
-  await Promise.all(pt).then(values => console.log('3'));
-  console.log('4');
-};
+}, 10000);
 
 // App Config
 const port = process.env.PORT || 5000;
