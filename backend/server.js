@@ -119,14 +119,6 @@ app.post('/ncdata', async (req, res) => {
   res.json(data);
 });
 
-app.post('/ncimageslocal', (req, res) => {
-  fs.readdir('./temp', async (err, files) => {
-    if (err) return console.log(err);
-
-    res.json({ files });
-  });
-});
-
 const saveImagesToServer = async () => {
   let data;
   await axios

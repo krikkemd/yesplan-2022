@@ -8,17 +8,12 @@ function App() {
   // Data Query Urls:
   const showTimeQuery = 'http://10.0.209.29:5000/showtimedata'; // alle data omtrent tijden van voorstellingen
   const narrowcastingQuery = 'http://10.0.209.29:5000/ncdata'; // valuesOnly query, een hele bak yesplan data incl. NC
-  const imageQuery = 'http://10.0.209.29:5000/ncimageslocal'; // fetches the image file names stored locally on the server inside the image dir
 
   // Local state
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
 
-  const urls = [
-    'http://10.0.209.29:5000/showtimedata',
-    'http://10.0.209.29:5000/ncdata',
-    'http://10.0.209.29:5000/ncimageslocal',
-  ];
+  const urls = ['http://10.0.209.29:5000/showtimedata', 'http://10.0.209.29:5000/ncdata'];
 
   // get all data from urls above
   const getData = async () => {
@@ -122,17 +117,14 @@ function App() {
         });
       });
 
-      // // values[2] is an array which containes the names of the images stored on the server, returned from fs.readdir on the server
-      // compare the image names on the server with the ncOriginalNames
+      // if el.narrowcastingOriginalName is true, an img is uploaded to the event. Add the server ip adress in front of it, so it will rerender properly
       finalArray.map(el => {
-        values[2].files.map(img => {
-          if (`${el.narrowcastingTonen}-${el.narrowcastingOriginalName}` === img) {
-            // if the values match, add the server path in front of the name so we can use the url to display the img
-            console.log(true);
-            el.narrowcastingOriginalName =
-              'http://10.0.209.29:5000/' + encodeURIComponent(`${img}`);
-          }
-        });
+        if (el.narrowcastingOriginalName) {
+          console.log(true);
+          el.narrowcastingOriginalName =
+            'http://10.0.209.29:5000/' +
+            encodeURIComponent(`${el.narrowcastingTonen}-${el.narrowcastingOriginalName}`);
+        }
       });
 
       console.log(finalArray);
