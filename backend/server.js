@@ -119,6 +119,14 @@ app.post('/ncdata', async (req, res) => {
   res.json(data);
 });
 
+app.post('/ncimageslocal', (req, res) => {
+  fs.readdir('./temp', async (err, files) => {
+    if (err) return console.log(err);
+
+    res.json({ files });
+  });
+});
+
 const saveImagesToServer = async () => {
   let data;
   await axios
@@ -168,12 +176,19 @@ const saveImagesToServer = async () => {
                     console.log('sharp');
                     await sharpImage(1920, 1080, temp_path, output_path);
                   }
+                  if (
+                    image.ncTonen === 'Evenement als voorstelling' &&
+                    !fs.existsSync(output_path)
+                  ) {
+                    console.log('sharp');
+                    await sharpImage(1920, 1080, temp_path, output_path);
+                  }
                   if (image.ncTonen === 'Evenement' && !fs.existsSync(output_path)) {
                     await sharpImage(1080, 1920, temp_path, output_path);
                   }
                   if (image.ncTonen === null) {
                     console.log('ncTonen is leeg');
-                    await sharpImage(150, 150, temp_path, output_path);
+                    await sharpImage(1, 1, temp_path, output_path);
                   }
 
                   resolve(temp_path); // when the createWriteSteam is finished -> resolve the promise returning the path where the img is located
