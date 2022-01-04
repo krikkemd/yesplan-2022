@@ -1,20 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../css/poortjes.css';
 import datum from '../util/helper';
 
 export const Poortjes = ({ data }) => {
   const [shows, setShows] = useState([data]);
   let [showIndex, setShowIndex] = useState(0);
-  let [width, setWidth] = useState(0);
-  let [height, setHeight] = useState(0);
 
+  let [width, setWidth] = useState(window.screen.width);
+  let [height, setHeight] = useState(window.screen.height);
+  const [elHeight, setElHeight] = useState();
+
+  const elRef = useRef();
+
+  const getElHeight = () => {
+    setElHeight(elRef.current.clientHeight);
+  };
+
+  // Get the height of the ref element to determine positioning of the text boxes
   useEffect(() => {
+    getElHeight();
+  }, [elRef?.current?.clientHeight]);
+
+  console.log(elRef);
+
+  // Get the screen resolution
+  const getScreenSize = () => {
+    console.log('resize');
     setWidth(window.screen.width);
     setHeight(window.screen.height);
+    console.log(window.screen.width);
+    console.log(window.screen.height);
+  };
+
+  // Update 'width' and 'height' when the window resizes
+  // https://www.kindacode.com/article/react-get-the-width-height-of-a-dynamic-element/
+  useEffect(() => {
+    window.addEventListener('resize', getScreenSize);
   }, []);
 
-  console.log(height);
-  console.log(width);
   // useEffect to determine which event to show
   useEffect(() => {
     // filter out shows with ncTonen === null
@@ -38,25 +61,50 @@ export const Poortjes = ({ data }) => {
     <div>
       {/* background image + overlay */}
       <img
-        style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: -1,
+        }}
         src={shows[showIndex]?.narrowcastingOriginalName}></img>
-      <div className={'image-overlay'}></div>
+      <div
+        className={'image-overlay'}
+        style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0.2 : 1 }}></div>
 
       {/* Genre */}
-      <div className='text-container-blue' style={{ top: '841px', left: '50px' }}>
-        <div className={'text-medium white'}>{shows[showIndex]?.genre}</div>
-      </div>
+      {shows[showIndex]?.genre && (
+        <div
+          className='text-box box-teal'
+          style={{ top: `${height - elHeight * 4}px`, left: `${elHeight}px` }}>
+          <div className={'text-medium text-white'}>
+            {shows[showIndex]?.genreExtra
+              ? `${shows[showIndex]?.genre} | ${shows[showIndex]?.genreExtra}`
+              : shows[showIndex]?.genre}
+          </div>
+        </div>
+      )}
 
-      {/* Date */}
-      <div className='text-container-blue' style={{ top: '901px', left: '50px' }}>
-        <div className={'text-medium white'}> {datum}</div>
+      {/* Date + time */}
+      <div
+        className='text-box box-teal'
+        style={{ top: `${height - elHeight * 3}px`, left: `${elHeight}px` }}>
+        <div className={'text-medium text-white'}>
+          {datum} | {`${shows[showIndex]?.start} - ${shows[showIndex]?.end}`} |{' '}
+          {shows[showIndex]?.location?.toUpperCase()}
+        </div>
       </div>
 
       {/* Event Information */}
-      <div className='text-container-blue' style={{ top: '966px', left: '50px' }}>
-        <div className={'text-large white'}>
-          {shows[showIndex]?.location} {shows[showIndex]?.narrowcastingTonen}{' '}
-          {shows[showIndex]?.narrowcastingTitel}
+      <div
+        ref={elRef}
+        className='text-box box-purple'
+        style={{ top: `${height - elHeight * 2}px`, left: `${elHeight}px` }}>
+        <div className={'text-large text-white'}>
+          {shows[showIndex]?.narrowcastingTitel?.toUpperCase()}{' '}
+          <span className='text-medium text-white'>
+            {shows[showIndex]?.narrowcastingUitvoerende}
+          </span>
         </div>
       </div>
     </div>

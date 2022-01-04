@@ -142,7 +142,7 @@ function App() {
   useEffect(() => {
     getData();
     const interval = setInterval(() => {
-      // getData();
+      getData();
     }, 10000);
 
     return () => clearInterval(interval);
