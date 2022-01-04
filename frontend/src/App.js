@@ -71,6 +71,8 @@ function App() {
         const narrowcastingTonen = show.items.narrowcasting_tonen;
         const narrowcastingAfbeelding = show.items.narrowcasting_afbeelding?.dataurl;
         const narrowcastingOriginalName = show.items.narrowcasting_afbeelding?.originalname;
+        const genre = show.items?.voorstellingsinfo_genre;
+        const genreExtra = show.items?.voorstellingsinfo_genreextra;
         const uitvoerende = show.items.voorstellingsinfo_uitvoerende;
         const titel = show.items.voorstellingsinfo_titel;
         const pauze = show.items?.interneinformatietijden_pauzeduur;
@@ -87,6 +89,8 @@ function App() {
           narrowcastingOriginalName,
           extraInformatie,
           uitvoerende,
+          genre,
+          genreExtra,
           pauze,
           titel,
           voorstellingsbegeleider,
@@ -138,39 +142,16 @@ function App() {
   useEffect(() => {
     getData();
     const interval = setInterval(() => {
-      getData();
+      // getData();
     }, 10000);
 
     return () => clearInterval(interval);
   }, []);
 
-  let d = new Date();
-  let days = ['ZO', 'MA', 'DI', 'WO', 'DO', 'VR', 'ZA'];
-  let months = [
-    'Januari',
-    'Februari',
-    'Maart',
-    'April',
-    'Mei',
-    'Juni',
-    'Juli',
-    'Augustus',
-    'September',
-    'Oktober',
-    'November',
-    'December',
-  ];
-
-  let datum = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
-
   // PAINT THE DOM
   return (
     <Router>
       <div className='App'>
-        {/* <hr /> */}
-        {/* Date */}
-        {/* <p>{datum}</p> */}
-
         {loading ? (
           <div>loading...</div>
         ) : (
