@@ -164,24 +164,33 @@ const saveImagesToServer = async () => {
               res.data
                 .pipe(fs.createWriteStream(temp_path))
                 .on('finish', async () => {
-                  if (image.ncTonen === 'Voorstelling' && !fs.existsSync(output_path)) {
-                    console.log('sharp');
-                    await sharpImage(1920, 1080, temp_path, output_path);
-                  }
                   if (
-                    image.ncTonen === 'Evenement als voorstelling' &&
-                    !fs.existsSync(output_path)
+                    !fs.existsSync(`./images/landscape-${image.filename}`) ||
+                    !fs.existsSync(`./images/portrait-${image.filename}`)
                   ) {
                     console.log('sharp');
-                    await sharpImage(1920, 1080, temp_path, output_path);
+                    await sharpImage(1920, 1080, temp_path, `./images/landscape-${image.filename}`);
+                    await sharpImage(1080, 1920, temp_path, `./images/portrait-${image.filename}`);
                   }
-                  if (image.ncTonen === 'Evenement' && !fs.existsSync(output_path)) {
-                    await sharpImage(1080, 1920, temp_path, output_path);
-                  }
-                  if (image.ncTonen === null) {
-                    console.log('ncTonen is leeg');
-                    await sharpImage(1, 1, temp_path, output_path);
-                  }
+
+                  // if (image.ncTonen === 'Voorstelling' && !fs.existsSync(output_path)) {
+                  //   console.log('sharp');
+                  //   await sharpImage(1920, 1080, temp_path, output_path);
+                  // }
+                  // if (
+                  //   image.ncTonen === 'Evenement als voorstelling' &&
+                  //   !fs.existsSync(output_path)
+                  // ) {
+                  //   console.log('sharp');
+                  //   await sharpImage(1920, 1080, temp_path, output_path);
+                  // }
+                  // if (image.ncTonen === 'Evenement' && !fs.existsSync(output_path)) {
+                  //   await sharpImage(1080, 1920, temp_path, output_path);
+                  // }
+                  // if (image.ncTonen === null) {
+                  //   console.log('ncTonen is leeg');
+                  //   await sharpImage(1, 1, temp_path, output_path);
+                  // }
 
                   resolve(temp_path); // when the createWriteSteam is finished -> resolve the promise returning the path where the img is located
                 })

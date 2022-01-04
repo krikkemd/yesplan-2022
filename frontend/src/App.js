@@ -122,14 +122,14 @@ function App() {
       });
 
       // if el.narrowcastingOriginalName is true, an img is uploaded to the event. Add the server ip adress in front of it, so it will rerender properly
-      finalArray.map(el => {
-        if (el.narrowcastingOriginalName) {
-          console.log(true);
-          el.narrowcastingOriginalName =
-            'http://10.0.209.29:5000/' +
-            encodeURIComponent(`${el.narrowcastingTonen}-${el.narrowcastingOriginalName}`);
-        }
-      });
+      // finalArray.map(el => {
+      //   if (el.narrowcastingOriginalName) {
+      //     console.log(true);
+      //     el.narrowcastingOriginalName =
+      //       'http://10.0.209.29:5000/' +
+      //       encodeURIComponent(`${el.narrowcastingTonen}-${el.narrowcastingOriginalName}`);
+      //   }
+      // });
 
       console.log(finalArray);
 

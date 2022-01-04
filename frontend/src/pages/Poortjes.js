@@ -8,6 +8,7 @@ export const Poortjes = ({ data }) => {
 
   let [width, setWidth] = useState(window.screen.width);
   let [height, setHeight] = useState(window.screen.height);
+  const [layout, setLayout] = useState(width > height ? 'landscape' : 'portrait');
   const [elHeight, setElHeight] = useState();
 
   const elRef = useRef();
@@ -21,13 +22,16 @@ export const Poortjes = ({ data }) => {
     getElHeight();
   }, [elRef?.current?.clientHeight]);
 
-  console.log(elRef);
-
   // Get the screen resolution
   const getScreenSize = () => {
     console.log('resize');
     setWidth(window.screen.width);
     setHeight(window.screen.height);
+    console.log(window);
+
+    // window.screen.width > window.screen.height ? setLayout('landscape') : setLayout('portrait');
+    window.innerWidth > window.innerHeight ? setLayout('landscape') : setLayout('portrait');
+
     console.log(window.screen.width);
     console.log(window.screen.height);
   };
@@ -67,10 +71,14 @@ export const Poortjes = ({ data }) => {
           left: 0,
           zIndex: -1,
         }}
-        src={shows[showIndex]?.narrowcastingOriginalName}></img>
+        src={
+          shows[showIndex]?.narrowcastingOriginalName &&
+          'http://10.0.209.29:5000/' +
+            encodeURIComponent(`${layout}-${shows[showIndex]?.narrowcastingOriginalName}`)
+        }></img>
       <div
         className={'image-overlay'}
-        style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0.2 : 1 }}></div>
+        style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0.6 : 1 }}></div>
 
       {/* Genre */}
       {shows[showIndex]?.genre && (
