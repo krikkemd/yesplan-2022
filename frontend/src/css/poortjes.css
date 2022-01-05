@@ -31,6 +31,9 @@ body {
 .text-white {
   color: #fff;
 }
+.text-black {
+  color: #000;
+}
 
 .box-purple {
   background-color: #634a97;

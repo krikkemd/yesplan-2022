@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../css/poortjes.css';
 import datum from '../util/helper';
+import BackupPoortjes from './BackupPoortjes';
 
 export const Poortjes = ({ data }) => {
   const [shows, setShows] = useState([data]);
@@ -12,6 +13,7 @@ export const Poortjes = ({ data }) => {
   const [elHeight, setElHeight] = useState();
 
   const elRef = useRef();
+  console.log(elRef);
 
   const getElHeight = () => {
     setElHeight(elRef.current.clientHeight);
@@ -61,7 +63,7 @@ export const Poortjes = ({ data }) => {
     }
   }, [data]);
 
-  return shows && shows.length ? (
+  return shows && shows.length && shows[showIndex] ? (
     <div>
       {/* background image + overlay */}
       <img
@@ -116,7 +118,37 @@ export const Poortjes = ({ data }) => {
         </div>
       </div>
     </div>
+  ) : shows[0] ? (
+    // Shows[showindex] reset
+    <BackupPoortjes
+      shows={shows}
+      layout={layout}
+      elHeight={elHeight}
+      elRef={elRef}
+      height={height}
+    />
   ) : (
-    <div>Poortjes: Geen voorstellingen vandaag</div>
+    // Gesloten
+    <div>
+      {/* Image overlay */}
+      <div
+        className={'image-overlay'}
+        style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0.6 : 1 }}></div>
+
+      {/* Datum */}
+      <div
+        className='text-box box-teal'
+        style={{ top: `${height - elHeight * 3}px`, left: `${elHeight}px` }}>
+        <div className={'text-medium text-black'}>{datum} | DNK</div>
+      </div>
+
+      {/* Geen voorstellingen vandaag */}
+      <div
+        ref={elRef}
+        className='text-box box-purple'
+        style={{ top: `${height - elHeight * 2}px`, left: `${elHeight}px` }}>
+        <div className={'text-large text-white'}>Geen voorstellingen vandaag</div>
+      </div>
+    </div>
   );
 };
