@@ -12,12 +12,16 @@ body {
 }
 
 .text-box {
+  font-family: 'Neue Hans Kendrick';
   position: absolute;
   display: inline-block;
   border-radius: 15px;
   padding: 0.5rem 2.5rem 0.5rem 2.5rem;
 }
 
+.text-largest {
+  font-size: 72px;
+}
 .text-large {
   font-size: 36px;
 }

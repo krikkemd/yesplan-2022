@@ -55,6 +55,25 @@ const BackupPoortjes = ({ shows, layout, elHeight, elRef, height }) => {
           <span className='text-medium text-white'>{shows[0]?.narrowcastingUitvoerende}</span>
         </div>
       </div>
+
+      {/* DNK Logo */}
+      <div
+        className='text-box box-teal'
+        style={
+          layout === 'landscape'
+            ? {
+                top: `${height - elHeight * 2.5}px`,
+                right: `${elHeight}px`,
+                paddingBottom: `${elHeight * 2.5}px`,
+              }
+            : {
+                bottom: `${height - elHeight * 2.5}px`,
+                right: `${elHeight}px`,
+                paddingTop: `${elHeight * 2.5}px`,
+              }
+        }>
+        <div className={'text-largest text-white'}>DNK</div>
+      </div>
     </div>
   );
 };

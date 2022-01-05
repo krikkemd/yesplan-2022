@@ -93,7 +93,7 @@ export const Poortjes = ({ data }) => {
         <div
           className='text-box box-teal'
           style={{ top: `${height - elHeight * 4}px`, left: `${elHeight}px` }}>
-          <div className={'text-medium text-white'}>
+          <div className={'text-medium text-black'}>
             {shows[showIndex]?.genreExtra
               ? `${shows[showIndex]?.genre} | ${shows[showIndex]?.genreExtra}`
               : shows[showIndex]?.genre}
@@ -105,7 +105,7 @@ export const Poortjes = ({ data }) => {
       <div
         className='text-box box-teal'
         style={{ top: `${height - elHeight * 3}px`, left: `${elHeight}px` }}>
-        <div className={'text-medium text-white'}>
+        <div className={'text-medium text-black'}>
           {datum} | {`${shows[showIndex]?.start} - ${shows[showIndex]?.end}`} |{' '}
           {shows[showIndex]?.location?.toUpperCase()}
         </div>
@@ -122,6 +122,25 @@ export const Poortjes = ({ data }) => {
             {shows[showIndex]?.narrowcastingUitvoerende}
           </span>
         </div>
+      </div>
+
+      {/* DNK Logo */}
+      <div
+        className='text-box box-teal'
+        style={
+          layout === 'landscape'
+            ? {
+                top: `${height - elHeight * 2.5}px`,
+                right: `${elHeight}px`,
+                paddingBottom: `${elHeight * 2.5}px`,
+              }
+            : {
+                bottom: `${height - elHeight * 2.5}px`,
+                right: `${elHeight}px`,
+                paddingTop: `${elHeight * 2.5}px`,
+              }
+        }>
+        <div className={'text-largest text-white'}>DNK</div>
       </div>
     </div>
   ) : shows[0] ? (
