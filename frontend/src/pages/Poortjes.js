@@ -46,8 +46,14 @@ export const Poortjes = ({ data }) => {
 
   // useEffect to determine which event to show
   useEffect(() => {
-    // filter out shows with ncTonen === null
-    setShows(data.filter(show => show.narrowcastingTonen !== null && show));
+    // filter out shows with ncTonen === null and sort on show start
+    setShows(
+      data
+        .filter(show => show.narrowcastingTonen !== null && show)
+        .sort((a, b) => {
+          return a.start < b.start ? -1 : a.start > b.start ? 1 : 0;
+        }),
+    );
 
     // determines which event[x] is shown everytime data is renewed (renews every x seconds in App.js getAllData)
     if (shows && shows.length) {
@@ -131,16 +137,28 @@ export const Poortjes = ({ data }) => {
     // Gesloten
     <div>
       {/* Image overlay */}
-      <div
+      <img
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 10,
+        }}
+        src={
+          layout === 'landscape'
+            ? 'http://10.0.209.29:5000/theater-gesloten.jpg'
+            : 'http://10.0.209.29:5000/theater-gesloten-1080.jpg'
+        }></img>
+      {/* <div
         className={'image-overlay'}
-        style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0.6 : 1 }}></div>
+        style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0.6 : 0.9 }}></div> */}
 
       {/* Datum */}
-      <div
+      {/* <div
         className='text-box box-teal'
         style={{ top: `${height - elHeight * 3}px`, left: `${elHeight}px` }}>
         <div className={'text-medium text-black'}>{datum} | DNK</div>
-      </div>
+      </div> */}
 
       {/* Geen voorstellingen vandaag */}
       <div
