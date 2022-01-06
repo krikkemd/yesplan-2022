@@ -58,7 +58,7 @@ const BackupPoortjes = ({ shows, layout, elHeight, elRef, height }) => {
 
       {/* DNK Logo */}
       <div
-        className='text-box box-teal'
+        className='text-box box-purple'
         style={
           layout === 'landscape'
             ? {

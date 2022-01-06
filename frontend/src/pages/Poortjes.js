@@ -11,12 +11,20 @@ export const Poortjes = ({ data }) => {
   let [height, setHeight] = useState(window.screen.height);
   const [layout, setLayout] = useState(width > height ? 'landscape' : 'portrait');
   const [elHeight, setElHeight] = useState();
+  const [eventInfoRefHeight, setEventInfoRefHeight] = useState();
+  const [logoWidth, setLogoWidth] = useState();
 
   const elRef = useRef();
+  const eventInfoRef = useRef();
+  const logoRef = useRef();
   console.log(elRef);
+  console.log(elHeight);
+  console.log(eventInfoRefHeight);
 
   const getElHeight = () => {
-    setElHeight(elRef.current.clientHeight);
+    setElHeight(elRef.current.clientHeight + 15);
+    setEventInfoRefHeight(eventInfoRef.current.clientHeight);
+    setLogoWidth(logoRef.current.clientWidth);
   };
 
   // Get the height of the ref element to determine positioning of the text boxes
@@ -88,59 +96,77 @@ export const Poortjes = ({ data }) => {
         className={'image-overlay'}
         style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0.6 : 1 }}></div>
 
-      {/* Genre */}
-      {shows[showIndex]?.genre && (
+      {/* Container */}
+      <div className='container' style={{ paddingLeft: `${elHeight}px` }}>
+        {/* Genre */}
+        {shows[showIndex]?.genre && (
+          <div
+            className='text-box box-teal'
+            style={{ top: `${height - elHeight * 3 - eventInfoRefHeight}px` }}>
+            <div className={'text-small text-semiBold text-black'}>
+              {shows[showIndex]?.genreExtra
+                ? `${shows[showIndex]?.genre} | ${shows[showIndex]?.genreExtra}`
+                : shows[showIndex]?.genre}
+            </div>
+          </div>
+        )}
+
+        {/* Date + time */}
         <div
+          ref={elRef}
           className='text-box box-teal'
-          style={{ top: `${height - elHeight * 4}px`, left: `${elHeight}px` }}>
-          <div className={'text-medium text-black'}>
-            {shows[showIndex]?.genreExtra
-              ? `${shows[showIndex]?.genre} | ${shows[showIndex]?.genreExtra}`
-              : shows[showIndex]?.genre}
+          style={{ top: `${height - elHeight * 2 - eventInfoRefHeight}px` }}>
+          <div className={'text-small text-semiBold text-black'}>
+            {datum} | {`${shows[showIndex]?.start} - ${shows[showIndex]?.end}`} |{' '}
+            {shows[showIndex]?.location?.toUpperCase()}
           </div>
         </div>
-      )}
 
-      {/* Date + time */}
-      <div
-        className='text-box box-teal'
-        style={{ top: `${height - elHeight * 3}px`, left: `${elHeight}px` }}>
-        <div className={'text-medium text-black'}>
-          {datum} | {`${shows[showIndex]?.start} - ${shows[showIndex]?.end}`} |{' '}
-          {shows[showIndex]?.location?.toUpperCase()}
+        {/* Event Information */}
+        <div
+          ref={eventInfoRef}
+          className='text-box box-purple'
+          style={{
+            top: `${height - elHeight - eventInfoRefHeight}px`,
+            marginRight: layout === 'landscape' ? `${logoWidth + elHeight * 2}px` : `${elHeight}px`,
+            zIndex: 10,
+          }}>
+          <div className={'text-large text-semiBold text-white'}>
+            {shows[showIndex]?.narrowcastingTitel?.toUpperCase()}{' '}
+            {layout === 'landscape' && (
+              <span className='text-medium text-regular text-white'>
+                {shows[showIndex]?.narrowcastingUitvoerende}
+              </span>
+            )}
+            {layout === 'portrait' && (
+              <div className='text-medium text-regular text-white'>
+                {shows[showIndex]?.narrowcastingUitvoerende}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Event Information */}
-      <div
-        ref={elRef}
-        className='text-box box-purple'
-        style={{ top: `${height - elHeight * 2}px`, left: `${elHeight}px` }}>
-        <div className={'text-large text-white'}>
-          {shows[showIndex]?.narrowcastingTitel?.toUpperCase()}{' '}
-          <span className='text-medium text-white'>
-            {shows[showIndex]?.narrowcastingUitvoerende}
-          </span>
+        {/* DNK Logo */}
+        <div
+          ref={logoRef}
+          className='text-box box-purple'
+          style={
+            layout === 'landscape'
+              ? {
+                  top: `${height - elHeight * 2.5}px`,
+                  right: `${elHeight}px`,
+                  paddingBottom: `${elHeight * 2.5}px`,
+                  zIndex: 1,
+                }
+              : {
+                  bottom: `${height - elHeight * 2.5}px`,
+                  right: `${elHeight}px`,
+                  paddingTop: `${elHeight * 2.5}px`,
+                  zIndex: 1,
+                }
+          }>
+          <div className={'text-largest text-regular text-white'}>DNK</div>
         </div>
-      </div>
-
-      {/* DNK Logo */}
-      <div
-        className='text-box box-teal'
-        style={
-          layout === 'landscape'
-            ? {
-                top: `${height - elHeight * 2.5}px`,
-                right: `${elHeight}px`,
-                paddingBottom: `${elHeight * 2.5}px`,
-              }
-            : {
-                bottom: `${height - elHeight * 2.5}px`,
-                right: `${elHeight}px`,
-                paddingTop: `${elHeight * 2.5}px`,
-              }
-        }>
-        <div className={'text-largest text-white'}>DNK</div>
       </div>
     </div>
   ) : shows[0] ? (
@@ -184,7 +210,7 @@ export const Poortjes = ({ data }) => {
         ref={elRef}
         className='text-box box-purple'
         style={{ top: `${height - elHeight * 2}px`, left: `${elHeight}px` }}>
-        <div className={'text-large text-white'}>Geen voorstellingen vandaag</div>
+        <div className={'text-large text-semiBold text-white'}>Geen voorstellingen vandaag</div>
       </div>
     </div>
   );

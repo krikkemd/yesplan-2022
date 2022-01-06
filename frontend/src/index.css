@@ -11,10 +11,14 @@ code {
 }
 
 @font-face {
-  font-family: 'Neue Hans Kendrick';
+  font-family: 'Neue Hans Kendrick SemiBold';
+  src: local('Neue Hans Kendrick'),
+    url('./fonts/NeueHansKendrick/NeueHansKendrick-SemiBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Neue Hans Kendrick Regular';
   src: local('Neue Hans Kendrick'),
     url('./fonts/NeueHansKendrick/NeueHansKendrick-Regular.ttf') format('truetype');
-  font-weight: bold;
 }
 
 .font-face-gm {
