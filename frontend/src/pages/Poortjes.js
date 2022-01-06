@@ -30,7 +30,7 @@ export const Poortjes = ({ data }) => {
   // Get the height of the ref element to determine positioning of the text boxes
   useEffect(() => {
     getElHeight();
-  }, [elRef?.current?.clientHeight]);
+  }, [elRef?.current?.clientHeight, showIndex]);
 
   // Get the screen resolution
   const getScreenSize = () => {
