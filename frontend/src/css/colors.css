@@ -1,0 +1,18 @@
+.parent {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 50px;
+  grid-row-gap: 50px;
+
+  height: 100vh;
+  padding: 50px;
+}
+
+.child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  color: white;
+}

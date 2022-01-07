@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AllEvents } from './pages/AllEvents';
 import { Poortjes } from './pages/Poortjes';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Colors from './pages/Colors';
 
 function App() {
   // 1) GET DATA AND PROCESS
@@ -166,6 +167,7 @@ function App() {
           <Routes>
             <Route path='/allevents' element={<AllEvents data={data} />} />
             <Route path='/poortjes' element={<Poortjes data={data} />} />
+            <Route path='/kleuren' element={<Colors />} />
           </Routes>
         )}
       </div>

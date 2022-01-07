@@ -8,24 +8,6 @@ export const Poortjes = ({ data }) => {
   const [shows, setShows] = useState([data]);
   let [showIndex, setShowIndex] = useState(0);
 
-  const aubergine = '#542549';
-  const blauw = '#008abb';
-  const cyaan = '#57ceca';
-  const geel = '#f3df2f';
-  const grijsGroen = '#a5bdac';
-  const groenLicht = '#c2d886';
-  const groenBlauw = '#009b8e';
-  const oranjeDonker = '#f18705';
-  const oranjeLicht = '#f4a900';
-  const paars = '#4e2a96';
-  const paarsDonker = '#2a1d48';
-  const paarsLicht = '#634a97';
-  const paarsRoze = '#9e2558';
-  const roze = '#e06179';
-  const zalm = '#e69282';
-
-  const [color1, setColor1] = useState('');
-  const [color2, setColor2] = useState('');
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
   const [layout, setLayout] = useState(width > height ? 'landscape' : 'portrait');
@@ -97,7 +79,7 @@ export const Poortjes = ({ data }) => {
       {/* background image + overlay */}
       <img
         style={{
-          // position: 'absolute',
+          position: 'absolute',
           top: 0,
           left: 0,
           zIndex: -1,
@@ -182,8 +164,8 @@ export const Poortjes = ({ data }) => {
               <span
                 className={
                   shows[showIndex].narrowcastingTextColor2
-                    ? `text-medium text-regualr text-color-${shows[showIndex].narrowcastingTextColor2}`
-                    : 'text-medium text-regualr text-color-Wit'
+                    ? `text-medium text-regular text-color-${shows[showIndex].narrowcastingTextColor2}`
+                    : 'text-medium text-regular text-color-Wit'
                 }>
                 {shows[showIndex]?.narrowcastingUitvoerende}
               </span>
@@ -192,8 +174,8 @@ export const Poortjes = ({ data }) => {
               <div
                 className={
                   shows[showIndex].narrowcastingTextColor2
-                    ? `text-medium text-regualr text-color-${shows[showIndex].narrowcastingTextColor2}`
-                    : 'text-medium text-regualr text-color-Wit'
+                    ? `text-medium text-regular text-color-${shows[showIndex].narrowcastingTextColor2}`
+                    : 'text-medium text-regular text-color-Wit'
                 }>
                 {shows[showIndex]?.narrowcastingUitvoerende}
               </div>
