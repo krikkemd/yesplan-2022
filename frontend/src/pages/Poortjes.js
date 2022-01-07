@@ -7,22 +7,22 @@ export const Poortjes = ({ data }) => {
   const [shows, setShows] = useState([data]);
   let [showIndex, setShowIndex] = useState(0);
 
-  let [width, setWidth] = useState(window.screen.width);
-  let [height, setHeight] = useState(window.screen.height);
+  let [width, setWidth] = useState(window.innerWidth);
+  let [height, setHeight] = useState(window.innerHeight);
   const [layout, setLayout] = useState(width > height ? 'landscape' : 'portrait');
   const [elHeight, setElHeight] = useState();
+  const [genreHeight, setGenreHeight] = useState();
   const [eventInfoRefHeight, setEventInfoRefHeight] = useState();
   const [logoWidth, setLogoWidth] = useState();
 
+  const testRef = useRef();
   const elRef = useRef();
   const eventInfoRef = useRef();
   const logoRef = useRef();
-  console.log(elRef);
-  console.log(elHeight);
-  console.log(eventInfoRefHeight);
 
   const getElHeight = () => {
     setElHeight(elRef.current.clientHeight + 15);
+    setGenreHeight(testRef?.current?.clientHeight + 15);
     setEventInfoRefHeight(eventInfoRef.current.clientHeight);
     setLogoWidth(logoRef.current.clientWidth);
   };
@@ -35,15 +35,11 @@ export const Poortjes = ({ data }) => {
   // Get the screen resolution
   const getScreenSize = () => {
     console.log('resize');
-    setWidth(window.screen.width);
-    setHeight(window.screen.height);
-    console.log(window);
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
 
-    // window.screen.width > window.screen.height ? setLayout('landscape') : setLayout('portrait');
+    // window.innerWidth > window.screen.height ? setLayout('landscape') : setLayout('portrait');
     window.innerWidth > window.innerHeight ? setLayout('landscape') : setLayout('portrait');
-
-    console.log(window.screen.width);
-    console.log(window.screen.height);
   };
 
   // Update 'width' and 'height' when the window resizes
@@ -86,6 +82,8 @@ export const Poortjes = ({ data }) => {
           top: 0,
           left: 0,
           zIndex: -1,
+          // maxWidth: '100%',
+          // height: 'auto',
         }}
         src={
           shows[showIndex]?.narrowcastingOriginalName &&
@@ -101,6 +99,7 @@ export const Poortjes = ({ data }) => {
         {/* Genre */}
         {shows[showIndex]?.genre && (
           <div
+            ref={testRef}
             className='text-box box-teal'
             style={{ top: `${height - elHeight * 3 - eventInfoRefHeight}px` }}>
             <div className={'text-small text-semiBold text-black'}>
@@ -159,9 +158,9 @@ export const Poortjes = ({ data }) => {
                   zIndex: 1,
                 }
               : {
-                  bottom: `${height - elHeight * 2.5}px`,
+                  bottom: `${height - genreHeight * 2.5}px`,
                   right: `${elHeight}px`,
-                  paddingTop: `${elHeight * 2.5}px`,
+                  paddingTop: `${genreHeight * 2.5}px`,
                   zIndex: 1,
                 }
           }>
