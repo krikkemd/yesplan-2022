@@ -69,6 +69,10 @@ function App() {
         const extraInformatie = show.items.narrowcasting_voorstelling_extrainformatie;
         const narrowcastingTitel = show.items.narrowcasting_voorstelling_titel;
         const narrowcastingTonen = show.items.narrowcasting_tonen;
+        const narrowcastingColor1 = show.items.narrowcasting_kleur1;
+        const narrowcastingColor2 = show.items.narrowcasting_kleur2;
+        const narrowcastingTextColor1 = show.items.narrowcasting_tekstkleur1;
+        const narrowcastingTextColor2 = show.items.narrowcasting_tekstkleur2;
         const narrowcastingAfbeelding = show.items.narrowcasting_afbeelding?.dataurl;
         const narrowcastingOriginalName = show.items.narrowcasting_afbeelding?.originalname;
         const genre = show.items?.voorstellingsinfo_genre;
@@ -86,6 +90,10 @@ function App() {
           narrowcastingTitel,
           narrowcastingAfbeelding,
           narrowcastingTonen,
+          narrowcastingColor1,
+          narrowcastingColor2,
+          narrowcastingTextColor1,
+          narrowcastingTextColor2,
           narrowcastingOriginalName,
           extraInformatie,
           uitvoerende,

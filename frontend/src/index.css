@@ -30,3 +30,55 @@ code {
 .font-face-gm {
   font-family: 'Neue Hans Kendrick';
 }
+
+.box-Aubergine {
+  background-color: #542549;
+}
+.box-Blauw {
+  background-color: #008abb;
+}
+.box-Cyaan {
+  background-color: #57ceca;
+}
+.box-Geel {
+  background-color: #f3df2f;
+}
+.box-Grijsgroen {
+  background-color: #a5bdac;
+}
+.box-Groen-licht {
+  background-color: #c2d886;
+}
+.box-Groenblauw {
+  background-color: #009b8e;
+}
+.box-Oranje-donker {
+  background-color: #f18705;
+}
+.box-Oranje-licht {
+  background-color: #f4a900;
+}
+.box-Paars {
+  background-color: #4e2a96;
+}
+.box-Paars-donker {
+  background-color: #2a1d48;
+}
+.box-Paars-licht {
+  background-color: #634a97;
+}
+.box-Paarsroze {
+  background-color: #9e2558;
+}
+.box-Roze {
+  background-color: #e06179;
+}
+.box-Zalm {
+  background-color: #e69282;
+}
+.text-color-Wit {
+  color: #fff;
+}
+.text-color-Zwart {
+  color: #000;
+}

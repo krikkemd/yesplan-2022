@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../css/poortjes.css';
+import '../index.css';
 import datum from '../util/helper';
 import BackupPoortjes from './BackupPoortjes';
 
@@ -7,8 +8,26 @@ export const Poortjes = ({ data }) => {
   const [shows, setShows] = useState([data]);
   let [showIndex, setShowIndex] = useState(0);
 
-  let [width, setWidth] = useState(window.innerWidth);
-  let [height, setHeight] = useState(window.innerHeight);
+  const aubergine = '#542549';
+  const blauw = '#008abb';
+  const cyaan = '#57ceca';
+  const geel = '#f3df2f';
+  const grijsGroen = '#a5bdac';
+  const groenLicht = '#c2d886';
+  const groenBlauw = '#009b8e';
+  const oranjeDonker = '#f18705';
+  const oranjeLicht = '#f4a900';
+  const paars = '#4e2a96';
+  const paarsDonker = '#2a1d48';
+  const paarsLicht = '#634a97';
+  const paarsRoze = '#9e2558';
+  const roze = '#e06179';
+  const zalm = '#e69282';
+
+  const [color1, setColor1] = useState('');
+  const [color2, setColor2] = useState('');
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
   const [layout, setLayout] = useState(width > height ? 'landscape' : 'portrait');
   const [elHeight, setElHeight] = useState();
   const [genreHeight, setGenreHeight] = useState();
@@ -78,7 +97,7 @@ export const Poortjes = ({ data }) => {
       {/* background image + overlay */}
       <img
         style={{
-          position: 'absolute',
+          // position: 'absolute',
           top: 0,
           left: 0,
           zIndex: -1,
@@ -100,9 +119,18 @@ export const Poortjes = ({ data }) => {
         {shows[showIndex]?.genre && (
           <div
             ref={testRef}
-            className='text-box box-teal'
+            className={
+              shows[showIndex].narrowcastingColor1
+                ? `text-box box-${shows[showIndex].narrowcastingColor1}`
+                : 'text-box box-teal'
+            }
             style={{ top: `${height - elHeight * 3 - eventInfoRefHeight}px` }}>
-            <div className={'text-small text-semiBold text-black'}>
+            <div
+              className={
+                shows[showIndex].narrowcastingTextColor1
+                  ? `text-small text-semiBold text-color-${shows[showIndex].narrowcastingTextColor1}`
+                  : 'text-small text-semiBold text-color-Wit'
+              }>
               {shows[showIndex]?.genreExtra
                 ? `${shows[showIndex]?.genre} | ${shows[showIndex]?.genreExtra}`
                 : shows[showIndex]?.genre}
@@ -113,9 +141,18 @@ export const Poortjes = ({ data }) => {
         {/* Date + time */}
         <div
           ref={elRef}
-          className='text-box box-teal'
+          className={
+            shows[showIndex].narrowcastingColor1
+              ? `text-box box-${shows[showIndex].narrowcastingColor1}`
+              : 'text-box box-teal'
+          }
           style={{ top: `${height - elHeight * 2 - eventInfoRefHeight}px` }}>
-          <div className={'text-small text-semiBold text-black'}>
+          <div
+            className={
+              shows[showIndex].narrowcastingTextColor1
+                ? `text-small text-semiBold text-color-${shows[showIndex].narrowcastingTextColor1}`
+                : 'text-small text-semiBold text-color-Wit'
+            }>
             {datum} | {`${shows[showIndex]?.start} - ${shows[showIndex]?.end}`} |{' '}
             {shows[showIndex]?.location?.toUpperCase()}
           </div>
@@ -124,21 +161,40 @@ export const Poortjes = ({ data }) => {
         {/* Event Information */}
         <div
           ref={eventInfoRef}
-          className='text-box box-purple'
+          className={
+            shows[showIndex].narrowcastingColor2
+              ? `text-box box-${shows[showIndex].narrowcastingColor2}`
+              : 'text-box box-purple'
+          }
           style={{
             top: `${height - elHeight - eventInfoRefHeight}px`,
             marginRight: layout === 'landscape' ? `${logoWidth + elHeight * 2}px` : `${elHeight}px`,
             zIndex: 10,
           }}>
-          <div className={'text-large text-semiBold text-white'}>
+          <div
+            className={
+              shows[showIndex].narrowcastingTextColor2
+                ? `text-large text-semiBold text-color-${shows[showIndex].narrowcastingTextColor2}`
+                : 'text-large text-semiBold text-color-Wit'
+            }>
             {shows[showIndex]?.narrowcastingTitel?.toUpperCase()}{' '}
             {layout === 'landscape' && (
-              <span className='text-medium text-regular text-white'>
+              <span
+                className={
+                  shows[showIndex].narrowcastingTextColor2
+                    ? `text-medium text-regualr text-color-${shows[showIndex].narrowcastingTextColor2}`
+                    : 'text-medium text-regualr text-color-Wit'
+                }>
                 {shows[showIndex]?.narrowcastingUitvoerende}
               </span>
             )}
             {layout === 'portrait' && (
-              <div className='text-medium text-regular text-white'>
+              <div
+                className={
+                  shows[showIndex].narrowcastingTextColor2
+                    ? `text-medium text-regualr text-color-${shows[showIndex].narrowcastingTextColor2}`
+                    : 'text-medium text-regualr text-color-Wit'
+                }>
                 {shows[showIndex]?.narrowcastingUitvoerende}
               </div>
             )}
@@ -148,7 +204,11 @@ export const Poortjes = ({ data }) => {
         {/* DNK Logo */}
         <div
           ref={logoRef}
-          className='text-box box-purple'
+          className={
+            shows[showIndex].narrowcastingColor2
+              ? `text-box box-${shows[showIndex].narrowcastingColor2}`
+              : 'text-box box-purple'
+          }
           style={
             layout === 'landscape'
               ? {
@@ -164,7 +224,14 @@ export const Poortjes = ({ data }) => {
                   zIndex: 1,
                 }
           }>
-          <div className={'text-largest text-regular text-white'}>DNK</div>
+          <div
+            className={
+              shows[showIndex].narrowcastingTextColor2
+                ? `text-largest text-regular text-color-${shows[showIndex].narrowcastingTextColor2}`
+                : 'text-largest text-regular text-color-Wit'
+            }>
+            DNK
+          </div>
         </div>
       </div>
     </div>
@@ -199,7 +266,7 @@ export const Poortjes = ({ data }) => {
 
       {/* Datum */}
       {/* <div
-        className='text-box box-teal'
+        className={`text-box box-${shows[showIndex].narrowcastingColor1}`}
         style={{ top: `${height - elHeight * 3}px`, left: `${elHeight}px` }}>
         <div className={'text-medium text-black'}>{datum} | DNK</div>
       </div> */}
