@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AllEvents } from './pages/AllEvents';
 import { Poortjes } from './pages/Poortjes';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
 import Colors from './pages/Colors';
 
 function App() {
@@ -165,9 +166,10 @@ function App() {
           <div>loading...</div>
         ) : (
           <Routes>
+            <Route path='/' element={<Dashboard />} />
             <Route path='/allevents' element={<AllEvents data={data} />} />
             <Route path='/poortjes' element={<Poortjes data={data} />} />
-            <Route path='/' element={<Colors />} />
+            <Route path='/kleuren' element={<Colors />} />
           </Routes>
         )}
       </div>

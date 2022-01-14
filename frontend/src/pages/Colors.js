@@ -1,30 +1,11 @@
-import { useState } from 'react';
 import '../css/colors.css';
-import '../css/interact.css';
-import '../util/interact';
-import 'semantic-ui-css/semantic.min.css';
-import { Dropdown, Button } from 'semantic-ui-react';
 
 const Colors = () => {
-  let [count, setCount] = useState(0);
-  const [items, setItems] = useState([]);
-
-  const options = [
-    { key: 1, text: 'Choice 1', value: 1 },
-    { key: 2, text: 'Choice 2', value: 2 },
-    { key: 3, text: 'Choice 3', value: 3 },
-  ];
-  // const handleClick = e => {
-  //   e.target.classList.contains('text-black')
-  //     ? e.target.classList.remove('text-black')
-  //     : e.target.classList.add('text-black');
-  //   console.log(e.target);
-  // };
-
-  const addElement = e => {
-    console.log('click');
-    setCount(++count);
-    setItems([...items, `color-${count}`]);
+  const handleClick = e => {
+    e.target.classList.contains('text-black')
+      ? e.target.classList.remove('text-black')
+      : e.target.classList.add('text-black');
+    console.log(e.target);
   };
 
   const colors = [
@@ -46,34 +27,15 @@ const Colors = () => {
   ];
   return (
     <div className='parent'>
-      <div style={{ width: '100%', height: '100%', border: '1px solid black' }}>
-        {items.map(val => (
-          <div className='resize-drag'>{val}</div>
-        ))}
-      </div>
-
-      {/* {colors.map((color, i) => (
+      {colors.map((color, i) => (
         <div
+          onClick={handleClick}
           key={color.value}
-          // className={'child text-white'}
-          className='resize-drag text-white child'
+          className={'child text-white'}
           style={{ backgroundColor: color.value }}>
           <span>{color.text}</span>
         </div>
-      ))} */}
-
-      <aside
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '25%',
-          border: '1px solid blue',
-          justifyContent: 'flex-start',
-        }}>
-        <Button onClick={addElement}>add one</Button>
-        <Dropdown clearable options={colors} selection />
-        <Dropdown clearable options={colors} selection />
-      </aside>
+      ))}
     </div>
   );
 };
