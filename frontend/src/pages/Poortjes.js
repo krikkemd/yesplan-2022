@@ -93,7 +93,7 @@ export const Poortjes = ({ data }) => {
         }></img>
       <div
         className={'image-overlay'}
-        style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0.6 : 1 }}></div>
+        style={{ opacity: shows[showIndex]?.narrowcastingOriginalName ? 0 : 1 }}></div>
 
       {/* Container */}
       <div className='container' style={{ paddingLeft: `${elHeight}px` }}>

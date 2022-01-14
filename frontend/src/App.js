@@ -167,7 +167,7 @@ function App() {
           <Routes>
             <Route path='/allevents' element={<AllEvents data={data} />} />
             <Route path='/poortjes' element={<Poortjes data={data} />} />
-            <Route path='/kleuren' element={<Colors />} />
+            <Route path='/' element={<Colors />} />
           </Routes>
         )}
       </div>

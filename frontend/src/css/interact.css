@@ -1,0 +1,15 @@
+.resize-drag {
+  width: 200px;
+  /* height: 200px; */
+  border-radius: 0.75rem;
+  padding: 20px;
+  /* margin: 1rem; */
+  background-color: green;
+  font-size: 20px;
+  font-family: 'Neue Hans Kendrick Regular';
+
+  touch-action: none;
+
+  /* This makes things *much* easier */
+  box-sizing: border-box;
+}
