@@ -10,12 +10,23 @@
   /* padding: 50px; */
 }
 
-.child {
+.div__color {
+  position: relative;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   /* border-radius: 15px; */
   font-family: 'Neue Hans Kendrick Regular';
+}
+
+.hidden {
+  display: none;
+}
+
+.button__close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
 }
 
 .text-white {

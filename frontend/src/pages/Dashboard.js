@@ -21,8 +21,16 @@ const DashBoard = () => {
     if (colorOne) {
       console.log(colorOne);
       setCount(++count);
-      setItems([...items, colorOne[0].value]);
+      setItems([...items, { hex: colorOne[0].value, id: `test${count}`, name: colorOne[0].text }]);
+      console.log(items);
     }
+  };
+
+  const removeColorElement = (e, id) => {
+    e.currentTarget.parentNode.classList.add('hidden');
+    let filteredItems = items.filter(item => item.id !== id);
+    console.log(filteredItems);
+    setItems(filteredItems);
   };
 
   const colors = [
@@ -46,10 +54,20 @@ const DashBoard = () => {
     <div className='container'>
       <div style={{ width: '100%', height: '100%', borderRight: '1px solid #ddd' }}>
         {items.map((val, i) => {
-          console.log(items);
           return (
-            <div key={val} className='resize-drag' style={{ backgroundColor: items[i] }}>
-              {val}
+            <div
+              key={`${val}-${i}`}
+              className={`resize-drag div__color class-${i}`}
+              style={{ backgroundColor: items[i].hex }}>
+              <Button
+                onClick={e => {
+                  removeColorElement(e, i);
+                }}
+                className='button__close'
+                icon='close'
+                size='mini'
+              />
+              {items[i].name}
             </div>
           );
         })}
