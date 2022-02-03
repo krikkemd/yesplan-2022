@@ -16,14 +16,14 @@ export const Poortjes = ({ data }) => {
   const [eventInfoRefHeight, setEventInfoRefHeight] = useState();
   const [logoWidth, setLogoWidth] = useState();
 
-  const testRef = useRef();
+  const genreRef = useRef();
   const elRef = useRef();
   const eventInfoRef = useRef();
   const logoRef = useRef();
 
   const getElHeight = () => {
     setElHeight(elRef.current.clientHeight + 15);
-    setGenreHeight(testRef?.current?.clientHeight + 15);
+    setGenreHeight(genreRef?.current?.clientHeight + 15);
     setEventInfoRefHeight(eventInfoRef.current.clientHeight);
     setLogoWidth(logoRef.current.clientWidth);
   };
@@ -100,7 +100,7 @@ export const Poortjes = ({ data }) => {
         {/* Genre */}
         {shows[showIndex]?.genre && (
           <div
-            ref={testRef}
+            ref={genreRef}
             className={
               shows[showIndex].narrowcastingColor1
                 ? `text-box box-${shows[showIndex].narrowcastingColor1}`
@@ -225,6 +225,12 @@ export const Poortjes = ({ data }) => {
       elHeight={elHeight}
       elRef={elRef}
       height={height}
+      genreRef={genreRef}
+      eventInfoRefHeight={eventInfoRefHeight}
+      logoRef={logoRef}
+      logoWidth={logoWidth}
+      eventInfoRef={eventInfoRef}
+      genreHeight={genreHeight}
     />
   ) : (
     // Gesloten
