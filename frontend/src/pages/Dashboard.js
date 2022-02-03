@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import '../css/dashboard.css';
 import '../css/interact.css';
 import '../util/interact';
 import 'semantic-ui-css/semantic.min.css';
+import '../css/dashboard.css';
 import { Dropdown, Button, Form } from 'semantic-ui-react';
 
-const Colors = () => {
+const DashBoard = () => {
   let [count, setCount] = useState(0);
   const [items, setItems] = useState([]);
   const [colorOne, setColorOne] = useState('');
@@ -18,9 +18,11 @@ const Colors = () => {
   };
 
   const addElement = e => {
-    console.log(colorOne);
-    setCount(++count);
-    setItems([...items, `color-${count}`]);
+    if (colorOne) {
+      console.log(colorOne);
+      setCount(++count);
+      setItems([...items, colorOne[0].value]);
+    }
   };
 
   const colors = [
@@ -41,34 +43,26 @@ const Colors = () => {
     { text: 'Zalm', value: '#e69282' },
   ];
   return (
-    <div className='parent'>
-      <div style={{ width: '100%', height: '100%', border: '1px solid black' }}>
-        {items.map(val => (
-          <div key={val} className='resize-drag' style={{ backgroundColor: colorOne[0].value }}>
-            {val}
-          </div>
-        ))}
+    <div className='container'>
+      <div style={{ width: '100%', height: '100%', borderRight: '1px solid #ddd' }}>
+        {items.map((val, i) => {
+          console.log(items);
+          return (
+            <div key={val} className='resize-drag' style={{ backgroundColor: items[i] }}>
+              {val}
+            </div>
+          );
+        })}
       </div>
-
-      {/* {colors.map((color, i) => (
-        <div
-          key={color.value}
-          // className={'child text-white'}
-          className='resize-drag text-white child'
-          style={{ backgroundColor: color.value }}>
-          <span>{color.text}</span>
-        </div>
-      ))} */}
 
       <aside
         style={{
           display: 'flex',
           flexDirection: 'column',
           width: '25%',
-          border: '1px solid blue',
           justifyContent: 'flex-start',
         }}>
-        <Form onSubmit={addElement}>
+        <Form>
           <Form.Select
             fluid
             label='Kleur'
@@ -83,4 +77,4 @@ const Colors = () => {
   );
 };
 
-export default Colors;
+export default DashBoard;

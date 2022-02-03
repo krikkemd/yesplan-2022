@@ -1,4 +1,4 @@
-.parent {
+.container {
   display: flex;
   background-color: #eee;
   /* grid-template-columns: repeat(5, 1fr); */
