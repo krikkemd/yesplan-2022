@@ -88,7 +88,7 @@ export const Poortjes = ({ data }) => {
         }}
         src={
           shows[showIndex]?.narrowcastingOriginalName &&
-          'http://10.0.209.29:5000/' +
+          'http://10.0.209.25:5000/' +
             encodeURIComponent(`${layout}-${shows[showIndex]?.narrowcastingOriginalName}`)
         }></img>
       <div
@@ -239,8 +239,8 @@ export const Poortjes = ({ data }) => {
         }}
         src={
           layout === 'landscape'
-            ? 'http://10.0.209.29:5000/theater-gesloten.jpg'
-            : 'http://10.0.209.29:5000/theater-gesloten-1080.jpg'
+            ? 'http://10.0.209.25:5000/theater-gesloten.jpg'
+            : 'http://10.0.209.25:5000/theater-gesloten-1080.jpg'
         }></img>
       {/* <div
         className={'image-overlay'}

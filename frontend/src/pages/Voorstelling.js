@@ -2,7 +2,7 @@ import React from 'react';
 
 const Voorstelling = ({ show, i }) => {
   console.log(show);
-  console.log('http://10.0.209.29:5000/' + encodeURIComponent(`${show.narrowcastingOriginalName}`));
+  console.log('http://10.0.209.25:5000/' + encodeURIComponent(`${show.narrowcastingOriginalName}`));
 
   return (
     <div
@@ -47,7 +47,7 @@ const Voorstelling = ({ show, i }) => {
               objectFit: 'cover',
             }}
             src={
-              'http://10.0.209.29:5000/' + encodeURIComponent(`${show.narrowcastingOriginalName}`)
+              'http://10.0.209.25:5000/' + encodeURIComponent(`${show.narrowcastingOriginalName}`)
             }
             alt='nc img'
           />

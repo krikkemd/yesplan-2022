@@ -8,14 +8,14 @@ import Colors from './pages/Colors';
 function App() {
   // 1) GET DATA AND PROCESS
   // Data Query Urls:
-  const showTimeQuery = 'http://10.0.209.29:5000/showtimedata'; // alle data omtrent tijden van voorstellingen
-  const narrowcastingQuery = 'http://10.0.209.29:5000/ncdata'; // valuesOnly query, een hele bak yesplan data incl. NC
+  const showTimeQuery = 'http://10.0.209.25:5000/showtimedata'; // alle data omtrent tijden van voorstellingen
+  const narrowcastingQuery = 'http://10.0.209.25:5000/ncdata'; // valuesOnly query, een hele bak yesplan data incl. NC
 
   // Local state
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
 
-  const urls = ['http://10.0.209.29:5000/showtimedata', 'http://10.0.209.29:5000/ncdata'];
+  const urls = ['http://10.0.209.25:5000/showtimedata', 'http://10.0.209.25:5000/ncdata'];
 
   // get all data from urls above
   const getData = async () => {
@@ -136,7 +136,7 @@ function App() {
       //   if (el.narrowcastingOriginalName) {
       //     console.log(true);
       //     el.narrowcastingOriginalName =
-      //       'http://10.0.209.29:5000/' +
+      //       'http://10.0.209.25:5000/' +
       //       encodeURIComponent(`${el.narrowcastingTonen}-${el.narrowcastingOriginalName}`);
       //   }
       // });

@@ -66,7 +66,7 @@ const Interval = ({ combinedData }) => {
                 objectFit: 'cover',
               }}
               src={
-                'http://10.0.209.29:5000/' + encodeURIComponent(`${show.narrowcastingOriginalName}`)
+                'http://10.0.209.25:5000/' + encodeURIComponent(`${show.narrowcastingOriginalName}`)
               }
               alt='nc img'
             />

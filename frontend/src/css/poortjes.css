@@ -27,24 +27,25 @@ body {
 }
 
 .text-largest {
-  /* font-size: 90px; */
   font-size: 5.625rem;
   font-size: clamp(2.5rem, 4rem, 5.625rem);
+  line-height: 5.625rem;
 }
 .text-large {
-  /* font-size: 48px; */
   font-size: 3rem;
   font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 3rem;
 }
 .text-medium {
-  /* font-size: 36px; */
   font-size: 2.25rem;
   font-size: clamp(1.5rem, 5vw, 2.25rem);
+  line-height: 2.25rem;
 }
 .text-small {
   /* font-size: 24px; */
   font-size: 1.5rem;
   font-size: clamp(1rem, 5vw, 1.5rem);
+  line-height: 1.5rem;
 }
 
 .box-purple {

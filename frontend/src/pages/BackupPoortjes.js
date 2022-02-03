@@ -16,7 +16,7 @@ const BackupPoortjes = ({ shows, layout, elHeight, elRef, height }) => {
         }}
         src={
           shows[0]?.narrowcastingOriginalName &&
-          'http://10.0.209.29:5000/' +
+          'http://10.0.209.25:5000/' +
             encodeURIComponent(`${layout}-${shows[0]?.narrowcastingOriginalName}`)
         }></img>
       <div

@@ -71,7 +71,7 @@ app.use('/api', limiter);
 app.use(
   cors({
     credentials: true,
-    origin: ['http://localhost:3000', 'http://10.0.209.29:3000'],
+    origin: ['http://localhost:3000', 'http://10.0.209.25:3000'],
   }),
 );
 
