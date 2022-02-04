@@ -68,3 +68,17 @@ interact('.resize-drag')
       }),
     ],
   });
+interact('.tap-target').on('tap', function (event) {
+  event.currentTarget.classList.toggle('text-white');
+  event.preventDefault();
+});
+// .on('doubletap', function (event) {
+//   console.log(event.target.innerText);
+//   event.currentTarget.classList.toggle('large');
+//   event.currentTarget.classList.remove('rotate');
+//   event.preventDefault();
+// })
+// .on('hold', function (event) {
+//   event.currentTarget.classList.toggle('rotate');
+//   event.currentTarget.classList.remove('large');
+// });

@@ -1,27 +1,50 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../css/interact.css';
 import '../util/interact';
 import 'semantic-ui-css/semantic.min.css';
 import '../css/dashboard.css';
-import { Dropdown, Button, Form } from 'semantic-ui-react';
+import { Button, Form } from 'semantic-ui-react';
 
 const DashBoard = () => {
   let [count, setCount] = useState(0);
   const [items, setItems] = useState([]);
+  let [text, setText] = useState('');
+  let [fontSize, setFontSize] = useState();
   const [colorOne, setColorOne] = useState('');
+  const [target, setTarget] = useState();
+
+  useEffect(() => {
+    if (target) {
+      setFontSize(`${parseInt(target.style.fontSize) || ''}`);
+    }
+  }, [target]);
 
   const handleChange = e => {
     console.log(e);
     console.log(e.target.innerText);
-
     setColorOne(colors.filter(color => color.text === e.target.innerText && color.value));
   };
 
-  const addElement = e => {
+  const handleChangeText = e => {
+    console.log(e.target.value);
+    setText(e.target.value);
+  };
+
+  const addColorElement = e => {
     if (colorOne) {
       console.log(colorOne);
       setCount(++count);
-      setItems([...items, { hex: colorOne[0].value, id: `test${count}`, name: colorOne[0].text }]);
+      setItems([
+        ...items,
+        {
+          hex: colorOne[0].value,
+          id: `test${count}`,
+          name: colorOne[0].text,
+          text: text,
+          fontSize: 28,
+        },
+      ]);
+      setText('');
       console.log(items);
     }
   };
@@ -29,8 +52,22 @@ const DashBoard = () => {
   const removeColorElement = (e, id) => {
     e.currentTarget.parentNode.classList.add('hidden');
     let filteredItems = items.filter(item => item.id !== id);
-    console.log(filteredItems);
     setItems(filteredItems);
+  };
+
+  const increaseFontSize = targetEl => {
+    // console.log(targetEl);
+    if (targetEl) {
+      targetEl.style.fontSize = `${parseInt(targetEl.style.fontSize) + 1}px`;
+      setFontSize(`${parseInt(targetEl.style.fontSize)}`);
+    }
+  };
+
+  const decreaseFontSize = targetEl => {
+    if (targetEl) {
+      targetEl.style.fontSize = `${parseInt(targetEl.style.fontSize) - 1}px`;
+      setFontSize(`${parseInt(targetEl.style.fontSize)}`);
+    }
   };
 
   const colors = [
@@ -56,9 +93,14 @@ const DashBoard = () => {
         {items.map((val, i) => {
           return (
             <div
-              key={`${val}-${i}`}
-              className={`resize-drag div__color class-${i}`}
-              style={{ backgroundColor: items[i].hex }}>
+              key={`${val.name}-${i}`}
+              id={`${val.name}-${i}`}
+              onClick={e => {
+                setTarget(e.target);
+                setFontSize(`${parseInt(e.currentTarget.style.fontSize)}`);
+              }}
+              className={`resize-drag tap-target div__color class-${i}`}
+              style={{ backgroundColor: items[i].hex, fontSize: val.fontSize }}>
               <Button
                 onClick={e => {
                   removeColorElement(e, i);
@@ -67,7 +109,7 @@ const DashBoard = () => {
                 icon='close'
                 size='mini'
               />
-              {items[i].name}
+              {items[i].text || items[i].name}
             </div>
           );
         })}
@@ -88,8 +130,31 @@ const DashBoard = () => {
             options={colors}
             placeholder='Kleur'
           />
+          <Form.Input
+            fluid
+            label='Tekst'
+            value={text}
+            onChange={handleChangeText}
+            placeholder='tekst'
+          />
+          <Form.Group inline>
+            <Form.Button
+              label='Lettertype'
+              icon='angle up'
+              onClick={() => {
+                increaseFontSize(target);
+              }}
+            />
+            <Form.Button
+              icon='angle down'
+              onClick={() => {
+                decreaseFontSize(target);
+              }}
+            />
+            <span>{fontSize && `${fontSize}px`}</span>
+          </Form.Group>
+          <Form.Button onClick={addColorElement}>Submit</Form.Button>
         </Form>
-        <Form.Button onClick={addElement}>Submit</Form.Button>
       </aside>
     </div>
   );
