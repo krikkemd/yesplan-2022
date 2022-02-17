@@ -4,7 +4,7 @@ import '../index.css';
 import datum from '../util/helper';
 import BackupPoortjes from './BackupPoortjes';
 
-export const Poortjes = ({ data }) => {
+export const Poortjes = ({ data, fallback }) => {
   const [shows, setShows] = useState([data]);
   let [showIndex, setShowIndex] = useState(0);
 
@@ -87,9 +87,11 @@ export const Poortjes = ({ data }) => {
           // height: 'auto',
         }}
         src={
-          shows[showIndex]?.narrowcastingOriginalName &&
-          'http://10.0.209.25:5000/' +
-            encodeURIComponent(`${layout}-${shows[showIndex]?.narrowcastingOriginalName}`)
+          shows[showIndex]?.narrowcastingOriginalName && fallback === false
+            ? 'http://10.0.209.25:5000/' +
+              encodeURIComponent(`${layout}-${shows[showIndex]?.narrowcastingOriginalName}`)
+            : 'http://10.0.209.25:5001/' +
+              encodeURIComponent(`${layout}-${shows[showIndex]?.narrowcastingOriginalName}`)
         }></img>
       <div
         className={'image-overlay'}
@@ -199,9 +201,9 @@ export const Poortjes = ({ data }) => {
                   zIndex: 1,
                 }
               : {
-                  bottom: `${height - elHeight * 2.5}px`,
+                  bottom: `${height - genreHeight * 2.5}px`,
                   right: `${elHeight}px`,
-                  paddingTop: `${elHeight * 2.5}px`,
+                  paddingTop: `${genreHeight * 2.5}px`,
                   zIndex: 1,
                 }
           }>
@@ -229,6 +231,7 @@ export const Poortjes = ({ data }) => {
       logoRef={logoRef}
       logoWidth={logoWidth}
       eventInfoRef={eventInfoRef}
+      fallback={fallback}
     />
   ) : (
     // Gesloten

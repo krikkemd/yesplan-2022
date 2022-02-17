@@ -14,11 +14,17 @@ function App() {
   // Local state
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
+  const [fallback, setFallback] = useState(false);
 
   const urls = ['http://10.0.209.25:5000/showtimedata', 'http://10.0.209.25:5000/ncdata'];
+  const fallbackUrls = [
+    'http://10.0.209.25:5001/showtimedataFallback',
+    'http://10.0.209.25:5001/ncdataFallback',
+  ];
 
   // get all data from urls above
   const getData = async () => {
+    setFallback(false);
     const promiseArray = urls.map(async url => {
       try {
         const data = await fetch(url, {
@@ -153,7 +159,137 @@ function App() {
         setData(finalArray);
         setLoading(false);
       })
-      .catch(err => console.log('errorrrrrrrrrrrrrrr'));
+      .catch(err => {
+        console.log(err);
+        setFallback(true);
+        getFallbackData();
+      });
+  };
+
+  const getFallbackData = async () => {
+    console.error('RUNNING GETFALLBACKDATA');
+    const promiseArray = fallbackUrls.map(async url => {
+      try {
+        const data = await fetch(url, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+        const result = data.json();
+        return result;
+      } catch (err) {
+        console.log(err);
+      }
+    });
+
+    Promise.all(promiseArray)
+      .then(values => {
+        console.log(values);
+
+        let timeObj = {};
+        let ncObj = {};
+        let finalArray = [];
+
+        // Extract values from the data and create an array(times) of objects
+        const times = values[0].data.map(value => {
+          const name = value.name;
+          const id = value.id;
+          const start = value.defaultschedulestarttime;
+          const end = value.defaultscheduleendtime;
+          const location = value.locations[0].name;
+          const profile = value.profile.name;
+
+          timeObj = {
+            id,
+            name,
+            start,
+            end,
+            location,
+            profile,
+          };
+
+          return timeObj;
+        });
+
+        // Extract values from the data and create an array(nc) of objects
+        const nc = values[1].data.map(show => {
+          const id = show.event.id;
+          const narrowcastingUitvoerende = show.items.narrowcasting_uitvoerende;
+          const extraInformatie = show.items.narrowcasting_voorstelling_extrainformatie;
+          const narrowcastingTitel = show.items.narrowcasting_voorstelling_titel;
+          const narrowcastingTonen = show.items.narrowcasting_tonen;
+          const narrowcastingColor1 = show.items.narrowcasting_kleur1;
+          const narrowcastingColor2 = show.items.narrowcasting_kleur2;
+          const narrowcastingTextColor1 = show.items.narrowcasting_tekstkleur1;
+          const narrowcastingTextColor2 = show.items.narrowcasting_tekstkleur2;
+          const narrowcastingAfbeelding = show.items.narrowcasting_afbeelding?.dataurl;
+          const narrowcastingOriginalName = show.items.narrowcasting_afbeelding?.originalname;
+          const genre = show.items?.voorstellingsinfo_genre;
+          const genreExtra = show.items?.voorstellingsinfo_genreextra;
+          const uitvoerende = show.items.voorstellingsinfo_uitvoerende;
+          const titel = show.items.voorstellingsinfo_titel;
+          const pauze = show.items?.interneinformatietijden_pauzeduur;
+          const voorstellingsbegeleider =
+            show.items.voorstellingsbegeleider_voorstellingsbegeleider1?.contact?.name ||
+            show.items.voorstellingsbegeleider_voorstellingsbegeleider1?.contact?.person?.name;
+
+          ncObj = {
+            id,
+            narrowcastingUitvoerende,
+            narrowcastingTitel,
+            narrowcastingAfbeelding,
+            narrowcastingTonen,
+            narrowcastingColor1,
+            narrowcastingColor2,
+            narrowcastingTextColor1,
+            narrowcastingTextColor2,
+            narrowcastingOriginalName,
+            extraInformatie,
+            uitvoerende,
+            genre,
+            genreExtra,
+            pauze,
+            titel,
+            voorstellingsbegeleider,
+            kleedkamers: [],
+          };
+
+          // add kleedkamer data to the obj at this point. Each show gets it's own kleedkamer information
+          let kleedkamers = Object.keys(show.items).filter(el => {
+            if (el.startsWith('kleedkamerindeling_kleedkamer')) {
+              if (show.items[el] !== null) {
+                ncObj.kleedkamers = {
+                  ...ncObj.kleedkamers,
+                  [el]: show.items[el],
+                };
+              }
+            }
+          });
+
+          return ncObj;
+        });
+
+        // Combine the times array with the nc array (finalArray)
+        times.map(el => {
+          nc.map(val => {
+            if (el.id === val.id) {
+              finalArray.push({ ...el, ...val });
+            }
+          });
+        });
+
+        console.log(finalArray);
+
+        setData(finalArray);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
+        console.log('getfallback failed');
+      });
   };
 
   // Get all data interval
@@ -176,7 +312,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Dashboard />} />
             <Route path='/allevents' element={<AllEvents data={data} />} />
-            <Route path='/poortjes' element={<Poortjes data={data} />} />
+            <Route path='/poortjes' element={<Poortjes data={data} fallback={fallback} />} />
             <Route path='/kleuren' element={<Colors />} />
           </Routes>
         )}

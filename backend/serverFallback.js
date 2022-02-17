@@ -36,20 +36,6 @@ const sharpImage = async (width, height, imagePath, outputPath) => {
     .toFile(outputPath);
 };
 
-// function to empty the temp folder with original images
-const emptyDir = directory => {
-  console.log('deleting');
-  fs.readdir(directory, (err, files) => {
-    if (err) throw err;
-
-    for (const file of files) {
-      fs.unlink(path.join(directory, file), err => {
-        if (err) throw err;
-      });
-    }
-  });
-};
-
 app.get('/', (req, res, next) => {
   res.send('Hello World');
 });
@@ -89,35 +75,8 @@ app.use(express.static('images'));
 // app.use(express.static('temp'));
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ROUTES
+// FALLBACK ROUTES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Events today: hier ontvangen we de tijden (onderdaan meer query urls)
-app.post('/showtimedata', async (req, res) => {
-  let data;
-  await axios
-    .get(
-      `https://denieuwekolk.yesplan.nl/api/events/date:${req.body.date}(status:definitief)?api_key=${process.env.API_KEY}`,
-    )
-    .then(async res => {
-      data = await res.data;
-    });
-  res.json(data);
-});
-
-// Customdata: Hier ontvangen we de overige NC data (onderdaan meer query urls)
-app.post('/ncdata', async (req, res) => {
-  console.log(req.body);
-  let data;
-  await axios
-    .get(
-      `https://denieuwekolk.yesplan.nl/api/events/date:${req.body.date}(status:definitief) /customdata?=&valuesonly&api_key=${process.env.API_KEY}`,
-    )
-    .then(async res => {
-      data = await res.data;
-    });
-  res.json(data);
-});
 
 app.get('/showtimedataFallback', async (req, res) => {
   console.log('get fallback showtime data');
@@ -237,25 +196,6 @@ const saveImagesToServer = async () => {
                     await sharpImage(1080, 1920, temp_path, `./images/portrait-${image.filename}`);
                   }
 
-                  // if (image.ncTonen === 'Voorstelling' && !fs.existsSync(output_path)) {
-                  //   console.log('sharp');
-                  //   await sharpImage(1920, 1080, temp_path, output_path);
-                  // }
-                  // if (
-                  //   image.ncTonen === 'Evenement als voorstelling' &&
-                  //   !fs.existsSync(output_path)
-                  // ) {
-                  //   console.log('sharp');
-                  //   await sharpImage(1920, 1080, temp_path, output_path);
-                  // }
-                  // if (image.ncTonen === 'Evenement' && !fs.existsSync(output_path)) {
-                  //   await sharpImage(1080, 1920, temp_path, output_path);
-                  // }
-                  // if (image.ncTonen === null) {
-                  //   console.log('ncTonen is leeg');
-                  //   await sharpImage(1, 1, temp_path, output_path);
-                  // }
-
                   resolve(temp_path); // when the createWriteSteam is finished -> resolve the promise returning the path where the img is located
                 })
                 .on('error', e => reject(e));
@@ -271,14 +211,18 @@ const saveImagesToServer = async () => {
     });
 };
 
-// setInterval(() => {
-//   saveShowTimeFallbackData();
-//   saveNcFallbackData();
-//   saveImagesToServer();
-// }, 10000);
+setInterval(() => {
+  saveImagesToServer();
+}, 10000);
+
+setInterval(() => {
+  saveShowTimeFallbackData();
+  saveNcFallbackData();
+  saveImagesToServer();
+}, 300000);
 
 // App Config
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 process.on('unhandledRejection', err => {
   console.log('UNHANDLED REJECTION ❌ Shutting down...');
@@ -289,4 +233,4 @@ process.on('unhandledRejection', err => {
 });
 
 // Listen
-server.listen(port, () => console.log(`hello, listening on port: ${port}`));
+server.listen(port, () => console.log(`HELLO, FALLBACK SERVER listening on port: ${port}`));

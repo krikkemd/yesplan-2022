@@ -14,8 +14,9 @@ const BackupPoortjes = ({
   logoWidth,
   eventInfoRef,
   genreHeight,
+  fallback,
 }) => {
-  console.log('BACKUP');
+  console.log('BACKUP POORTJES');
   return (
     <div>
       {/* background image + overlay */}
@@ -29,9 +30,11 @@ const BackupPoortjes = ({
           // height: 'auto',
         }}
         src={
-          shows[0]?.narrowcastingOriginalName &&
-          'http://10.0.209.25:5000/' +
-            encodeURIComponent(`${layout}-${shows[0]?.narrowcastingOriginalName}`)
+          shows[0]?.narrowcastingOriginalName && fallback === false
+            ? 'http://10.0.209.25:5000/' +
+              encodeURIComponent(`${layout}-${shows[0]?.narrowcastingOriginalName}`)
+            : 'http://10.0.209.25:5001/' +
+              encodeURIComponent(`${layout}-${shows[0]?.narrowcastingOriginalName}`)
         }></img>
       <div
         className={'image-overlay'}
@@ -39,7 +42,7 @@ const BackupPoortjes = ({
 
       {/* Container */}
       <div className='container' style={{ paddingLeft: `${elHeight}px` }}>
-        {/* Genre */}
+        {/* Location */}
         {shows[0]?.genre && (
           <div
             ref={genreRef}
@@ -52,17 +55,15 @@ const BackupPoortjes = ({
             <div
               className={
                 shows[0].narrowcastingTextColor1
-                  ? `text-small text-semiBold text-color-${shows[0].narrowcastingTextColor1}`
-                  : 'text-small text-semiBold text-color-Wit'
+                  ? `text-large text-semiBold text-color-${shows[0].narrowcastingTextColor1}`
+                  : 'text-large text-semiBold text-color-Wit'
               }>
-              {shows[0]?.genreExtra
-                ? `${shows[0]?.genre} | ${shows[0]?.genreExtra}`
-                : shows[0]?.genre}
+              {shows[0]?.location?.toUpperCase()}
             </div>
           </div>
         )}
 
-        {/* Date + time */}
+        {/* Time */}
         <div
           ref={elRef}
           className={
@@ -74,11 +75,12 @@ const BackupPoortjes = ({
           <div
             className={
               shows[0].narrowcastingTextColor1
-                ? `text-small text-semiBold text-color-${shows[0].narrowcastingTextColor1}`
-                : 'text-small text-semiBold text-color-Wit'
+                ? `text-large text-semiBold text-color-${shows[0].narrowcastingTextColor1}`
+                : 'text-large text-semiBold text-color-Wit'
             }>
-            {datum} | {`${shows[0]?.start} - ${shows[0]?.end}`} |{' '}
-            {shows[0]?.location?.toUpperCase()}
+            {shows[0]?.pauze
+              ? `START: ${shows[0]?.start} | PAUZE: ${shows[0]?.pauze} | EINDE: ${shows[0]?.end}`
+              : `START: ${shows[0]?.start} | EINDE: ${shows[0]?.end}`}
           </div>
         </div>
 
@@ -98,16 +100,16 @@ const BackupPoortjes = ({
           <div
             className={
               shows[0].narrowcastingTextColor2
-                ? `text-large text-semiBold text-color-${shows[0].narrowcastingTextColor2}`
-                : 'text-large text-semiBold text-color-Wit'
+                ? `text-largest text-semiBold text-color-${shows[0].narrowcastingTextColor2}`
+                : 'text-largest text-semiBold text-color-Wit'
             }>
             {shows[0]?.narrowcastingTitel?.toUpperCase()}{' '}
             {layout === 'landscape' && (
               <span
                 className={
                   shows[0].narrowcastingTextColor2
-                    ? `text-medium text-regular text-color-${shows[0].narrowcastingTextColor2}`
-                    : 'text-medium text-regular text-color-Wit'
+                    ? `text-large text-regular text-color-${shows[0].narrowcastingTextColor2}`
+                    : 'text-large text-regular text-color-Wit'
                 }>
                 {shows[0]?.narrowcastingUitvoerende}
               </span>
@@ -116,8 +118,8 @@ const BackupPoortjes = ({
               <div
                 className={
                   shows[0].narrowcastingTextColor2
-                    ? `text-medium text-regular text-color-${shows[0].narrowcastingTextColor2}`
-                    : 'text-medium text-regular text-color-Wit'
+                    ? `text-large text-regular text-color-${shows[0].narrowcastingTextColor2}`
+                    : 'text-large text-regular text-color-Wit'
                 }>
                 {shows[0]?.narrowcastingUitvoerende}
               </div>
