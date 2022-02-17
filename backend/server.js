@@ -123,7 +123,9 @@ const saveImagesToServer = async () => {
   let data;
   await axios
     .get(
-      `https://denieuwekolk.yesplan.nl/api/events/date:${'24-11-2021'}(status:definitief) /customdata?=&valuesonly&api_key=${
+      `https://denieuwekolk.yesplan.nl/api/events/date:${`${new Date().getDate()}-${
+        new Date().getMonth() + 1
+      }-${new Date().getFullYear()}`}(status:definitief) /customdata?=&valuesonly&api_key=${
         process.env.API_KEY
       }`,
     )

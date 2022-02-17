@@ -24,8 +24,8 @@ export const Poortjes = ({ data }) => {
   const getElHeight = () => {
     setElHeight(elRef.current.clientHeight + 15);
     setGenreHeight(genreRef?.current?.clientHeight + 15);
-    setEventInfoRefHeight(eventInfoRef.current.clientHeight);
-    setLogoWidth(logoRef.current.clientWidth);
+    setEventInfoRefHeight(eventInfoRef?.current?.clientHeight);
+    setLogoWidth(logoRef?.current?.clientWidth);
   };
 
   // Get the height of the ref element to determine positioning of the text boxes
@@ -97,7 +97,7 @@ export const Poortjes = ({ data }) => {
 
       {/* Container */}
       <div className='container' style={{ paddingLeft: `${elHeight}px` }}>
-        {/* Genre */}
+        {/* Location */}
         {shows[showIndex]?.genre && (
           <div
             ref={genreRef}
@@ -110,17 +110,15 @@ export const Poortjes = ({ data }) => {
             <div
               className={
                 shows[showIndex].narrowcastingTextColor1
-                  ? `text-small text-semiBold text-color-${shows[showIndex].narrowcastingTextColor1}`
-                  : 'text-small text-semiBold text-color-Wit'
+                  ? `text-large text-semiBold text-color-${shows[showIndex].narrowcastingTextColor1}`
+                  : 'text-large text-semiBold text-color-Wit'
               }>
-              {shows[showIndex]?.genreExtra
-                ? `${shows[showIndex]?.genre} | ${shows[showIndex]?.genreExtra}`
-                : shows[showIndex]?.genre}
+              {shows[showIndex]?.location?.toUpperCase()}
             </div>
           </div>
         )}
 
-        {/* Date + time */}
+        {/* Time */}
         <div
           ref={elRef}
           className={
@@ -132,11 +130,12 @@ export const Poortjes = ({ data }) => {
           <div
             className={
               shows[showIndex].narrowcastingTextColor1
-                ? `text-small text-semiBold text-color-${shows[showIndex].narrowcastingTextColor1}`
-                : 'text-small text-semiBold text-color-Wit'
+                ? `text-large text-semiBold text-color-${shows[showIndex].narrowcastingTextColor1}`
+                : 'text-large text-semiBold text-color-Wit'
             }>
-            {datum} | {`${shows[showIndex]?.start} - ${shows[showIndex]?.end}`} |{' '}
-            {shows[showIndex]?.location?.toUpperCase()}
+            {shows[showIndex]?.pauze
+              ? `START: ${shows[showIndex]?.start} | PAUZE: ${shows[showIndex]?.pauze} | EINDE: ${shows[showIndex]?.end}`
+              : `START: ${shows[showIndex]?.start} | EINDE: ${shows[showIndex]?.end}`}
           </div>
         </div>
 
@@ -156,16 +155,16 @@ export const Poortjes = ({ data }) => {
           <div
             className={
               shows[showIndex].narrowcastingTextColor2
-                ? `text-large text-semiBold text-color-${shows[showIndex].narrowcastingTextColor2}`
-                : 'text-large text-semiBold text-color-Wit'
+                ? `text-largest text-semiBold text-color-${shows[showIndex].narrowcastingTextColor2}`
+                : 'text-largest text-semiBold text-color-Wit'
             }>
             {shows[showIndex]?.narrowcastingTitel?.toUpperCase()}{' '}
             {layout === 'landscape' && (
               <span
                 className={
                   shows[showIndex].narrowcastingTextColor2
-                    ? `text-medium text-regular text-color-${shows[showIndex].narrowcastingTextColor2}`
-                    : 'text-medium text-regular text-color-Wit'
+                    ? `text-large text-regular text-color-${shows[showIndex].narrowcastingTextColor2}`
+                    : 'text-large text-regular text-color-Wit'
                 }>
                 {shows[showIndex]?.narrowcastingUitvoerende}
               </span>
@@ -174,8 +173,8 @@ export const Poortjes = ({ data }) => {
               <div
                 className={
                   shows[showIndex].narrowcastingTextColor2
-                    ? `text-medium text-regular text-color-${shows[showIndex].narrowcastingTextColor2}`
-                    : 'text-medium text-regular text-color-Wit'
+                    ? `text-large text-regular text-color-${shows[showIndex].narrowcastingTextColor2}`
+                    : 'text-large text-regular text-color-Wit'
                 }>
                 {shows[showIndex]?.narrowcastingUitvoerende}
               </div>
@@ -200,9 +199,9 @@ export const Poortjes = ({ data }) => {
                   zIndex: 1,
                 }
               : {
-                  bottom: `${height - genreHeight * 2.5}px`,
+                  bottom: `${height - elHeight * 2.5}px`,
                   right: `${elHeight}px`,
-                  paddingTop: `${genreHeight * 2.5}px`,
+                  paddingTop: `${elHeight * 2.5}px`,
                   zIndex: 1,
                 }
           }>
@@ -230,7 +229,6 @@ export const Poortjes = ({ data }) => {
       logoRef={logoRef}
       logoWidth={logoWidth}
       eventInfoRef={eventInfoRef}
-      genreHeight={genreHeight}
     />
   ) : (
     // Gesloten
