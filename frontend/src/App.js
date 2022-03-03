@@ -35,10 +35,10 @@ function App() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            // date: `${new Date().getDate()}-${
-            //   new Date().getMonth() + 1
-            // }-${new Date().getFullYear()}`,
-            date: '24-11-2021',
+            date: `${new Date().getDate()}-${
+              new Date().getMonth() + 1
+            }-${new Date().getFullYear()}`,
+            // date: '24-11-2021',
           }),
         });
         const result = data.json();
@@ -52,6 +52,12 @@ function App() {
       .then(values => {
         console.log(values);
 
+        let date1 = new Date(values[0].data[2].defaultschedulestart);
+        let date2 = new Date().toLocaleTimeString('nl-NL');
+
+        console.log(date1);
+        console.log(date2);
+
         let timeObj = {};
         let ncObj = {};
         let finalArray = [];
@@ -61,6 +67,8 @@ function App() {
           const name = value.name;
           const id = value.id;
           const start = value.defaultschedulestarttime;
+          const scheduleStart = value.defaultschedulestart;
+          const scheduleEnd = value.defaultscheduleend;
           const end = value.defaultscheduleendtime;
           const location = value.locations[0].name;
           const profile = value.profile.name;
@@ -69,6 +77,8 @@ function App() {
             id,
             name,
             start,
+            scheduleStart,
+            scheduleEnd,
             end,
             location,
             profile,

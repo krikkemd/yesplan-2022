@@ -43,7 +43,7 @@ const BackupPoortjes = ({
       {/* Container */}
       <div className='container' style={{ paddingLeft: `${elHeight}px` }}>
         {/* Location */}
-        {shows[0]?.genre && (
+        {shows[0]?.location && (
           <div
             ref={genreRef}
             className={

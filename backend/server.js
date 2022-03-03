@@ -271,11 +271,9 @@ const saveImagesToServer = async () => {
     });
 };
 
-// setInterval(() => {
-//   saveShowTimeFallbackData();
-//   saveNcFallbackData();
-//   saveImagesToServer();
-// }, 10000);
+setInterval(() => {
+  saveImagesToServer();
+}, 60000);
 
 // App Config
 const port = process.env.PORT || 5000;

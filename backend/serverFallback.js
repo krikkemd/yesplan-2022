@@ -97,7 +97,11 @@ const saveNcFallbackData = async () => {
   let data;
   await axios
     .get(
-      `https://denieuwekolk.yesplan.nl/api/events/date:24-11-2021(status:definitief) /customdata?=&valuesonly&api_key=${process.env.API_KEY}`,
+      `https://denieuwekolk.yesplan.nl/api/events/date:${`${new Date().getDate()}-${
+        new Date().getMonth() + 1
+      }-${new Date().getFullYear()}`}(status:definitief) /customdata?=&valuesonly&api_key=${
+        process.env.API_KEY
+      }`,
     )
     .then(async res => {
       data = await res.data;
@@ -120,7 +124,9 @@ const saveShowTimeFallbackData = async () => {
   let data;
   await axios
     .get(
-      `https://denieuwekolk.yesplan.nl/api/events/date:24-11-2021(status:definitief)?api_key=${process.env.API_KEY}`,
+      `https://denieuwekolk.yesplan.nl/api/events/date:${`${new Date().getDate()}-${
+        new Date().getMonth() + 1
+      }-${new Date().getFullYear()}`}(status:definitief)?api_key=${process.env.API_KEY}`,
     )
     .then(async res => {
       data = await res.data;
@@ -212,14 +218,10 @@ const saveImagesToServer = async () => {
 };
 
 setInterval(() => {
-  saveImagesToServer();
-}, 10000);
-
-setInterval(() => {
   saveShowTimeFallbackData();
   saveNcFallbackData();
   saveImagesToServer();
-}, 300000);
+}, 1000 * 60 * 60);
 
 // App Config
 const port = process.env.PORT || 5001;

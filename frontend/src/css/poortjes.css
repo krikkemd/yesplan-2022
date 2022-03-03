@@ -16,6 +16,7 @@ body {
   display: inline-block;
   border-radius: 15px;
   padding: 0.75rem 2.25rem 0.75rem 2.25rem;
+  z-index: 10;
 }
 
 .text-semiBold {
@@ -54,4 +55,49 @@ body {
 
 .box-teal {
   background-color: #57ceca;
+}
+
+/* Info elements on page locations */
+
+.container {
+  padding-left: 78px;
+}
+
+.location-box-landscape {
+  top: 667px;
+}
+
+.times-box-landscape {
+  top: 745px;
+}
+
+.eventInfo-box-landscape {
+  z-index: 10;
+  top: 823px;
+  margin-right: 334px;
+}
+
+.logo-box-landscape {
+  top: 885px;
+  right: 78px;
+  padding-bottom: 195px;
+}
+
+.location-box-portrait {
+  top: 1465px;
+}
+
+.times-box-portrait {
+  top: 1543px;
+}
+
+.eventInfo-box-portrait {
+  top: 1621px;
+  margin-right: 78px;
+}
+
+.logo-box-portrait {
+  right: 78px;
+  bottom: 1725px;
+  padding-top: 195px;
 }

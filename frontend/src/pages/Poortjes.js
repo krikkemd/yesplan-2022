@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Embed } from 'semantic-ui-react';
 import '../css/poortjes.css';
 import '../index.css';
-import datum from '../util/helper';
 import BackupPoortjes from './BackupPoortjes';
 
 export const Poortjes = ({ data, fallback }) => {
@@ -22,7 +22,7 @@ export const Poortjes = ({ data, fallback }) => {
   const logoRef = useRef();
 
   const getElHeight = () => {
-    setElHeight(elRef.current.clientHeight + 15);
+    setElHeight(elRef?.current?.clientHeight + 15);
     setGenreHeight(genreRef?.current?.clientHeight + 15);
     setEventInfoRefHeight(eventInfoRef?.current?.clientHeight);
     setLogoWidth(logoRef?.current?.clientWidth);
@@ -32,6 +32,13 @@ export const Poortjes = ({ data, fallback }) => {
   useEffect(() => {
     getElHeight();
   }, [elRef?.current?.clientHeight, showIndex]);
+
+  useEffect(() => {
+    setInterval(() => {
+      console.log('reload timer');
+      window.location.reload();
+    }, 1000 * 60 * 90);
+  }, []);
 
   // Get the screen resolution
   const getScreenSize = () => {
@@ -51,10 +58,25 @@ export const Poortjes = ({ data, fallback }) => {
 
   // useEffect to determine which event to show
   useEffect(() => {
+    let now = new Date();
+    // let now = new Date('2022/02/25 22:51:00');
+
     // filter out shows with ncTonen === null and sort on show start
     setShows(
       data
-        .filter(show => show.narrowcastingTonen !== null && show)
+        // .filter(show => show.narrowcastingTonen !== null && show)
+        .filter(show => {
+          // remove shows without nc tonen
+          if (show.narrowcastingTonen !== null) {
+            // Only keep shows that have not ended
+            if (new Date(show.scheduleEnd) > now) {
+              return show;
+            } else {
+              console.log(`deze show is afgelopen: ${show.name}`);
+            }
+          }
+        })
+        // sort on start time
         .sort((a, b) => {
           return a.start < b.start ? -1 : a.start > b.start ? 1 : 0;
         }),
@@ -74,7 +96,76 @@ export const Poortjes = ({ data, fallback }) => {
     }
   }, [data]);
 
-  return shows && shows.length && shows[showIndex] ? (
+  // TIME BASED LOGIC START
+  const [hoursLeft, setHoursLeft] = useState();
+  const [lastShowHasEnded, setLastShowHasEnded] = useState(false);
+  const [time, setTime] = useState(24);
+
+  useEffect(() => {
+    let endtimes = []; // array met eindtijden van alle voorstellingen
+    let timer = setTimeout(() => {
+      // let now = new Date('2022/02/25 20:45:00');
+      // let now = new Date();
+      // tijdstip van de show die als eerste begint
+      setTime(new Date(shows[0]?.scheduleStart));
+
+      // push alle eindtijden naar endtimes array
+      shows?.forEach(show => endtimes.push(new Date(show.scheduleEnd)));
+
+      //  check hoe laat de de "laatste" eind tijd is
+      if (endtimes.length > 0) {
+        const maxDate = new Date(Math.max(...endtimes)); // Dit is de "laatste" eindtijd van alle voorstellingen van de dag. (als laatst afgelopen)
+        const minDate = new Date(Math.min(...endtimes)); // Dit is de "vroegste" eindtijd van de dag
+      }
+
+      // console.log(hoursLeft);
+      // console.log(new Date(time));
+      showDiff(new Date(), new Date(time));
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [time]);
+
+  function showDiff(now, showStart, lastShowEnd) {
+    var now = new Date();
+
+    // now = tijd NU
+    // showStart = start tijd van voorstelling
+    // lastShowEnd = eind tijd van de "laatste" voorstelling
+
+    // var showStart = new Date('2022/02/25 19:02:00');
+    // var lastShowEnd = new Date('2022/02/25 11:40:00');
+    //Customise showStart for your required future time
+
+    var diff = (showStart - now) / 1000;
+    var diff = Math.abs(Math.floor(diff));
+
+    var days = Math.floor(diff / (24 * 60 * 60));
+    var leftSec = diff - days * 24 * 60 * 60;
+
+    var hrs = Math.floor(leftSec / (60 * 60));
+    var leftSec = leftSec - hrs * 60 * 60;
+
+    setHoursLeft(hrs); // aantal uren tot dat de eerste voorstelling begint om de NC te triggeren
+
+    var min = Math.floor(leftSec / 60);
+    var leftSec = leftSec - min * 60;
+
+    console.log(`voorstelling begonnen?: ${now > showStart}`);
+    console.log(`laatste voorstelling afgelopen?: ${now > lastShowEnd}`);
+    setLastShowHasEnded(now > lastShowEnd);
+
+    // Wanneer de voorstelling is begonnen stoppen met deze log
+    if (showStart > now) {
+      console.log(
+        `you have ${days} days + ${hrs} hours + ${min} mins and ${leftSec} seconds before show starts `,
+      );
+    }
+  }
+
+  // TIME BASED LOGIC END
+
+  return shows && shows.length && shows[showIndex] && hoursLeft < 4 ? (
     <div>
       {/* background image + overlay */}
       <img
@@ -100,13 +191,13 @@ export const Poortjes = ({ data, fallback }) => {
       {/* Container */}
       <div className='container' style={{ paddingLeft: `${elHeight}px` }}>
         {/* Location */}
-        {shows[showIndex]?.genre && (
+        {shows[showIndex]?.location && (
           <div
             ref={genreRef}
             className={
               shows[showIndex].narrowcastingColor1
-                ? `text-box box-${shows[showIndex].narrowcastingColor1}`
-                : 'text-box box-teal'
+                ? `text-box location-box-${layout} box-${shows[showIndex].narrowcastingColor1}`
+                : `text-box location-box-${layout} box-teal`
             }
             style={{ top: `${height - elHeight * 3 - eventInfoRefHeight}px` }}>
             <div
@@ -125,8 +216,8 @@ export const Poortjes = ({ data, fallback }) => {
           ref={elRef}
           className={
             shows[showIndex].narrowcastingColor1
-              ? `text-box box-${shows[showIndex].narrowcastingColor1}`
-              : 'text-box box-teal'
+              ? `text-box times-box-${layout} box-${shows[showIndex].narrowcastingColor1}`
+              : `text-box times-box-${layout} box-teal`
           }
           style={{ top: `${height - elHeight * 2 - eventInfoRefHeight}px` }}>
           <div
@@ -146,8 +237,8 @@ export const Poortjes = ({ data, fallback }) => {
           ref={eventInfoRef}
           className={
             shows[showIndex].narrowcastingColor2
-              ? `text-box box-${shows[showIndex].narrowcastingColor2}`
-              : 'text-box box-purple'
+              ? `text-box eventInfo-box-${layout} box-${shows[showIndex].narrowcastingColor2}`
+              : `text-box eventInfo-box-${layout} box-purple`
           }
           style={{
             top: `${height - elHeight - eventInfoRefHeight}px`,
@@ -189,8 +280,8 @@ export const Poortjes = ({ data, fallback }) => {
           ref={logoRef}
           className={
             shows[showIndex].narrowcastingColor2
-              ? `text-box box-${shows[showIndex].narrowcastingColor2}`
-              : 'text-box box-purple'
+              ? `text-box logo-box-${layout} box-${shows[showIndex].narrowcastingColor2}`
+              : `text-box logo-box-${layout} box-purple`
           }
           style={
             layout === 'landscape'
@@ -218,7 +309,7 @@ export const Poortjes = ({ data, fallback }) => {
         </div>
       </div>
     </div>
-  ) : shows[0] ? (
+  ) : shows[0] && hoursLeft < 4 ? (
     // Shows[showindex] reset
     <BackupPoortjes
       shows={shows}
@@ -261,12 +352,12 @@ export const Poortjes = ({ data, fallback }) => {
       </div> */}
 
       {/* Geen voorstellingen vandaag */}
-      <div
+      {/* <div
         ref={elRef}
         className='text-box box-purple'
         style={{ top: `${height - elHeight * 2}px`, left: `${elHeight}px` }}>
         <div className={'text-large text-semiBold text-white'}>Geen voorstellingen vandaag</div>
-      </div>
+      </div> */}
     </div>
   );
 };
