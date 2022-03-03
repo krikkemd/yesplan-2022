@@ -68,7 +68,7 @@ export const Poortjes = ({ data, fallback }) => {
         .filter(show => {
           // remove shows without nc tonen
           if (show.narrowcastingTonen !== null) {
-            // Only keep shows that have not ended
+            // Only keep shows that have NOT ended
             if (new Date(show.scheduleEnd) > now) {
               return show;
             } else {
@@ -101,6 +101,27 @@ export const Poortjes = ({ data, fallback }) => {
   const [lastShowHasEnded, setLastShowHasEnded] = useState(false);
   const [time, setTime] = useState(24);
 
+  function subtractMinutes(numOfMinutes, date = new Date()) {
+    date.setMinutes(date.getMinutes() - numOfMinutes);
+
+    return date;
+  }
+
+  function addMinutes(numOfMinutes, date = new Date()) {
+    date.setMinutes(date.getMinutes() + numOfMinutes);
+
+    return date;
+  }
+
+  // // 👇️ Subtract 15 minutes from current Date
+  // const result = subtractMinutes(15);
+
+  // // 👇️ Subtract 20 minutes from another date
+  // const date = new Date('2022-06-24T08:35:10.820');
+
+  // // 👇️ Fri Jun 24 2022 08:15:10
+  // console.log(subtractMinutes(20, date));
+
   useEffect(() => {
     let endtimes = []; // array met eindtijden van alle voorstellingen
     let timer = setTimeout(() => {
@@ -111,6 +132,8 @@ export const Poortjes = ({ data, fallback }) => {
 
       // push alle eindtijden naar endtimes array
       shows?.forEach(show => endtimes.push(new Date(show.scheduleEnd)));
+
+      console.log(endtimes);
 
       //  check hoe laat de de "laatste" eind tijd is
       if (endtimes.length > 0) {
@@ -132,10 +155,10 @@ export const Poortjes = ({ data, fallback }) => {
     // now = tijd NU
     // showStart = start tijd van voorstelling
     // lastShowEnd = eind tijd van de "laatste" voorstelling
+    // Customise showStart for your required future time
 
     // var showStart = new Date('2022/02/25 19:02:00');
     // var lastShowEnd = new Date('2022/02/25 11:40:00');
-    //Customise showStart for your required future time
 
     var diff = (showStart - now) / 1000;
     var diff = Math.abs(Math.floor(diff));
@@ -151,7 +174,7 @@ export const Poortjes = ({ data, fallback }) => {
     var min = Math.floor(leftSec / 60);
     var leftSec = leftSec - min * 60;
 
-    console.log(`voorstelling begonnen?: ${now > showStart}`);
+    console.log(`Eerste voorstelling begonnen?: ${now > showStart}`);
     console.log(`laatste voorstelling afgelopen?: ${now > lastShowEnd}`);
     setLastShowHasEnded(now > lastShowEnd);
 
