@@ -59,7 +59,7 @@ export const Poortjes = ({ data, fallback }) => {
   // useEffect to determine which event to show
   useEffect(() => {
     let now = new Date();
-    // let now = new Date('2022/02/25 22:51:00');
+    // let now = new Date('2022/03/03 15:42:00');
 
     // filter out shows with ncTonen === null and sort on show start
     setShows(
@@ -68,11 +68,20 @@ export const Poortjes = ({ data, fallback }) => {
         .filter(show => {
           // remove shows without nc tonen
           if (show.narrowcastingTonen !== null) {
-            // Only keep shows that have NOT ended
-            if (new Date(show.scheduleEnd) > now) {
-              return show;
+            // Only keep shows that have NOT ended, remove shows that have ended for +30 minutes
+            // als het NU later is dan de eindtijd vd show, laat deze dan zien met gewijzigde afbeelding:
+            if (now > new Date(show.scheduleEnd)) {
+              console.log(`deze show is afgelopen: ${show.name} op tijdstip: ${show.scheduleEnd}`);
+
+              show.narrowcastingOriginalName =
+                'Het Laagland - Met Zonder Ballen Milan Gies - liggend.jpg';
+            }
+            // als het NU later is dan de eindtijd vd show + 30 min, laat deze dan niet meer zien
+            if (now > addMinutes(30, new Date(show.scheduleEnd))) {
+              console.log(`deze show is meer dan 30 minuten afgelopen: ${show.name}`);
             } else {
-              console.log(`deze show is afgelopen: ${show.name}`);
+              // Als het NU nog NIET later is dan de eindtijd van de show, hou dan de show en laat deze zien
+              return show;
             }
           }
         })
@@ -133,8 +142,6 @@ export const Poortjes = ({ data, fallback }) => {
       // push alle eindtijden naar endtimes array
       shows?.forEach(show => endtimes.push(new Date(show.scheduleEnd)));
 
-      console.log(endtimes);
-
       //  check hoe laat de de "laatste" eind tijd is
       if (endtimes.length > 0) {
         const maxDate = new Date(Math.max(...endtimes)); // Dit is de "laatste" eindtijd van alle voorstellingen van de dag. (als laatst afgelopen)
@@ -174,15 +181,15 @@ export const Poortjes = ({ data, fallback }) => {
     var min = Math.floor(leftSec / 60);
     var leftSec = leftSec - min * 60;
 
-    console.log(`Eerste voorstelling begonnen?: ${now > showStart}`);
-    console.log(`laatste voorstelling afgelopen?: ${now > lastShowEnd}`);
+    // console.log(`Eerste voorstelling begonnen?: ${now > showStart}`);
+    // console.log(`laatste voorstelling afgelopen?: ${now > lastShowEnd}`);
     setLastShowHasEnded(now > lastShowEnd);
 
     // Wanneer de voorstelling is begonnen stoppen met deze log
     if (showStart > now) {
-      console.log(
-        `you have ${days} days + ${hrs} hours + ${min} mins and ${leftSec} seconds before show starts `,
-      );
+      // console.log(
+      //   `you have ${days} days + ${hrs} hours + ${min} mins and ${leftSec} seconds before show starts `,
+      // );
     }
   }
 
