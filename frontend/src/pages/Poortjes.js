@@ -67,20 +67,27 @@ export const Poortjes = ({ data, fallback }) => {
         // .filter(show => show.narrowcastingTonen !== null && show)
         .filter(show => {
           // remove shows without nc tonen
-          if (show.narrowcastingTonen !== null) {
+          if (show.narrowcastingTonen !== null && show.scheduleEnd !== null) {
+            // Show eindigt binnen X min
+            if (now > subtractMinutes(5, new Date(show.scheduleEnd))) {
+              show.end = 'BINNEN 5 MIN';
+            }
+
             // Only keep shows that have NOT ended, remove shows that have ended for +30 minutes
             // als het NU later is dan de eindtijd vd show, laat deze dan zien met gewijzigde afbeelding:
             if (now > new Date(show.scheduleEnd)) {
               console.log(`deze show is afgelopen: ${show.name} op tijdstip: ${show.scheduleEnd}`);
+              console.log(show);
 
-              show.narrowcastingOriginalName =
-                'Het Laagland - Met Zonder Ballen Milan Gies - liggend.jpg';
+              show.end = 'AFGELOPEN';
+              // show.narrowcastingOriginalName =
+              //   'Het Laagland - Met Zonder Ballen Milan Gies - liggend.jpg';
             }
-            // als het NU later is dan de eindtijd vd show + 30 min, laat deze dan niet meer zien
+            // als het NU later is dan de eindtijd vd show + 30 min, laat deze dan niet meer zien.
             if (now > addMinutes(30, new Date(show.scheduleEnd))) {
               console.log(`deze show is meer dan 30 minuten afgelopen: ${show.name}`);
             } else {
-              // Als het NU nog NIET later is dan de eindtijd van de show, hou dan de show en laat deze zien
+              // Als het NU nog NIET later is dan de eindtijd van de show, hou dan deze show in de array om te laten zien
               return show;
             }
           }
@@ -133,9 +140,11 @@ export const Poortjes = ({ data, fallback }) => {
 
   useEffect(() => {
     let endtimes = []; // array met eindtijden van alle voorstellingen
+    const now = new Date();
     let timer = setTimeout(() => {
       // let now = new Date('2022/02/25 20:45:00');
       // let now = new Date();
+
       // tijdstip van de show die als eerste begint
       setTime(new Date(shows[0]?.scheduleStart));
 
@@ -150,7 +159,7 @@ export const Poortjes = ({ data, fallback }) => {
 
       // console.log(hoursLeft);
       // console.log(new Date(time));
-      showDiff(new Date(), new Date(time));
+      showDiff(now, new Date(time));
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -181,15 +190,15 @@ export const Poortjes = ({ data, fallback }) => {
     var min = Math.floor(leftSec / 60);
     var leftSec = leftSec - min * 60;
 
-    // console.log(`Eerste voorstelling begonnen?: ${now > showStart}`);
-    // console.log(`laatste voorstelling afgelopen?: ${now > lastShowEnd}`);
+    console.log(`Eerste voorstelling begonnen?: ${now > showStart}`);
+    console.log(`laatste voorstelling afgelopen?: ${now > lastShowEnd}`);
     setLastShowHasEnded(now > lastShowEnd);
 
     // Wanneer de voorstelling is begonnen stoppen met deze log
     if (showStart > now) {
-      // console.log(
-      //   `you have ${days} days + ${hrs} hours + ${min} mins and ${leftSec} seconds before show starts `,
-      // );
+      console.log(
+        `you have ${days} days + ${hrs} hours + ${min} mins and ${leftSec} seconds before show starts `,
+      );
     }
   }
 

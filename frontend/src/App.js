@@ -70,7 +70,7 @@ function App() {
           const scheduleStart = value.defaultschedulestart;
           const scheduleEnd = value.defaultscheduleend;
           const end = value.defaultscheduleendtime;
-          const location = value.locations[0].name;
+          const location = value.locations[0]?.name;
           const profile = value.profile.name;
 
           timeObj = {
@@ -209,7 +209,7 @@ function App() {
           const id = value.id;
           const start = value.defaultschedulestarttime;
           const end = value.defaultscheduleendtime;
-          const location = value.locations[0].name;
+          const location = value.locations[0]?.name;
           const profile = value.profile.name;
 
           timeObj = {
