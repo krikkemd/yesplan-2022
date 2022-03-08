@@ -66,7 +66,11 @@ export const Garderobe = ({ data, fallback }) => {
         // .filter(show => show.narrowcastingTonen !== null && show)
         .filter(show => {
           // remove shows without nc tonen
-          if (show.narrowcastingTonen !== null && show.scheduleEnd !== null) {
+          if (
+            show.narrowcastingTonen !== null &&
+            show.scheduleEnd !== null &&
+            now > subtractMinutes(240, new Date(show.scheduleStart)) === true // show starts within 240 minutes (4 hours)
+          ) {
             // Show eindigt binnen X min
             if (now > subtractMinutes(5, new Date(show.scheduleEnd))) {
               show.end = 'BINNEN 5 MIN';

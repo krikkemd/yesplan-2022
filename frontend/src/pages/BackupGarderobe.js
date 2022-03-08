@@ -41,125 +41,131 @@ const BackupGarderobe = ({
         style={{ opacity: shows[0]?.narrowcastingOriginalName ? 0 : 1 }}></div>
 
       {/* Container */}
-      <div className='container' style={{ paddingLeft: `${elHeight}px` }}>
-        {/* Location */}
-        {shows[0]?.location && (
+      {/* if narrowcastingOriginalName is equal to garderobenummer, hide all info fields */}
+      {shows[0]?.narrowcastingOriginalName !== 'garderobenummers.jpg' ? (
+        <div className='container' style={{ paddingLeft: `${elHeight}px` }}>
+          {/* Location */}
+          {shows[0]?.location && (
+            <div
+              ref={genreRef}
+              className={
+                shows[0].narrowcastingColor1
+                  ? `text-box location-box-${layout} box-${shows[0].narrowcastingColor1}`
+                  : `text-box location-box-${layout} box-teal`
+              }
+              style={{ top: `${height - elHeight * 3 - eventInfoRefHeight}px` }}>
+              <div
+                className={
+                  shows[0].narrowcastingTextColor1
+                    ? `text-large text-semiBold text-color-${shows[0].narrowcastingTextColor1}`
+                    : 'text-large text-semiBold text-color-Wit'
+                }>
+                {shows[0]?.location?.toUpperCase()}
+              </div>
+            </div>
+          )}
+
+          {/* Time */}
           <div
-            ref={genreRef}
+            ref={elRef}
             className={
               shows[0].narrowcastingColor1
-                ? `text-box box-${shows[0].narrowcastingColor1}`
-                : 'text-box box-teal'
+                ? `text-box times-box-${layout} box-${shows[0].narrowcastingColor1}`
+                : `text-box times-box-${layout} box-teal`
             }
-            style={{ top: `${height - elHeight * 3 - eventInfoRefHeight}px` }}>
+            style={{ top: `${height - elHeight * 2 - eventInfoRefHeight}px` }}>
             <div
               className={
                 shows[0].narrowcastingTextColor1
                   ? `text-large text-semiBold text-color-${shows[0].narrowcastingTextColor1}`
                   : 'text-large text-semiBold text-color-Wit'
               }>
-              {shows[0]?.location?.toUpperCase()}
+              {shows[0]?.pauze
+                ? `START: ${shows[0]?.start} | PAUZE: ${shows[0]?.pauze} | EINDE: ${shows[0]?.end}`
+                : `START: ${shows[0]?.start} | EINDE: ${shows[0]?.end}`}
             </div>
           </div>
-        )}
 
-        {/* Time */}
-        <div
-          ref={elRef}
-          className={
-            shows[0].narrowcastingColor1
-              ? `text-box box-${shows[0].narrowcastingColor1}`
-              : 'text-box box-teal'
-          }
-          style={{ top: `${height - elHeight * 2 - eventInfoRefHeight}px` }}>
+          {/* Event Information */}
           <div
+            ref={eventInfoRef}
             className={
-              shows[0].narrowcastingTextColor1
-                ? `text-large text-semiBold text-color-${shows[0].narrowcastingTextColor1}`
-                : 'text-large text-semiBold text-color-Wit'
+              shows[0].narrowcastingColor2
+                ? `text-box eventInfo-box-${layout} box-${shows[0].narrowcastingColor2}`
+                : `text-box eventInfo-box-${layout} box-purple`
+            }
+            style={{
+              top: `${height - elHeight - eventInfoRefHeight}px`,
+              marginRight:
+                layout === 'landscape' ? `${logoWidth + elHeight * 2}px` : `${elHeight}px`,
+              zIndex: 10,
+            }}>
+            <div
+              className={
+                shows[0].narrowcastingTextColor2
+                  ? `text-largest text-semiBold text-color-${shows[0].narrowcastingTextColor2}`
+                  : 'text-largest text-semiBold text-color-Wit'
+              }>
+              {shows[0]?.narrowcastingTitel?.toUpperCase()}{' '}
+              {layout === 'landscape' && (
+                <span
+                  className={
+                    shows[0].narrowcastingTextColor2
+                      ? `text-large text-regular text-color-${shows[0].narrowcastingTextColor2}`
+                      : 'text-large text-regular text-color-Wit'
+                  }>
+                  {shows[0]?.narrowcastingUitvoerende}
+                </span>
+              )}
+              {layout === 'portrait' && (
+                <div
+                  className={
+                    shows[0].narrowcastingTextColor2
+                      ? `text-large text-regular text-color-${shows[0].narrowcastingTextColor2}`
+                      : 'text-large text-regular text-color-Wit'
+                  }>
+                  {shows[0]?.narrowcastingUitvoerende}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* DNK Logo */}
+          <div
+            ref={logoRef}
+            className={
+              shows[0].narrowcastingColor2
+                ? `text-box logo-box-${layout} box-${shows[0].narrowcastingColor2}`
+                : `text-box logo-box-${layout} box-purple`
+            }
+            style={
+              layout === 'landscape'
+                ? {
+                    top: `${height - elHeight * 2.5}px`,
+                    right: `${elHeight}px`,
+                    paddingBottom: `${elHeight * 2.5}px`,
+                    zIndex: 1,
+                  }
+                : {
+                    bottom: `${height - genreHeight * 2.5}px`,
+                    right: `${elHeight}px`,
+                    paddingTop: `${genreHeight * 2.5}px`,
+                    zIndex: 1,
+                  }
             }>
-            {shows[0]?.pauze
-              ? `START: ${shows[0]?.start} | PAUZE: ${shows[0]?.pauze} | EINDE: ${shows[0]?.end}`
-              : `START: ${shows[0]?.start} | EINDE: ${shows[0]?.end}`}
+            <div
+              className={
+                shows[0].narrowcastingTextColor2
+                  ? `text-largest text-regular text-color-${shows[0].narrowcastingTextColor2}`
+                  : 'text-largest text-regular text-color-Wit'
+              }>
+              DNK
+            </div>
           </div>
         </div>
-
-        {/* Event Information */}
-        <div
-          ref={eventInfoRef}
-          className={
-            shows[0].narrowcastingColor2
-              ? `text-box box-${shows[0].narrowcastingColor2}`
-              : 'text-box box-purple'
-          }
-          style={{
-            top: `${height - elHeight - eventInfoRefHeight}px`,
-            marginRight: layout === 'landscape' ? `${logoWidth + elHeight * 2}px` : `${elHeight}px`,
-            zIndex: 10,
-          }}>
-          <div
-            className={
-              shows[0].narrowcastingTextColor2
-                ? `text-largest text-semiBold text-color-${shows[0].narrowcastingTextColor2}`
-                : 'text-largest text-semiBold text-color-Wit'
-            }>
-            {shows[0]?.narrowcastingTitel?.toUpperCase()}{' '}
-            {layout === 'landscape' && (
-              <span
-                className={
-                  shows[0].narrowcastingTextColor2
-                    ? `text-large text-regular text-color-${shows[0].narrowcastingTextColor2}`
-                    : 'text-large text-regular text-color-Wit'
-                }>
-                {shows[0]?.narrowcastingUitvoerende}
-              </span>
-            )}
-            {layout === 'portrait' && (
-              <div
-                className={
-                  shows[0].narrowcastingTextColor2
-                    ? `text-large text-regular text-color-${shows[0].narrowcastingTextColor2}`
-                    : 'text-large text-regular text-color-Wit'
-                }>
-                {shows[0]?.narrowcastingUitvoerende}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* DNK Logo */}
-        <div
-          ref={logoRef}
-          className={
-            shows[0].narrowcastingColor2
-              ? `text-box box-${shows[0].narrowcastingColor2}`
-              : 'text-box box-purple'
-          }
-          style={
-            layout === 'landscape'
-              ? {
-                  top: `${height - elHeight * 2.5}px`,
-                  right: `${elHeight}px`,
-                  paddingBottom: `${elHeight * 2.5}px`,
-                  zIndex: 1,
-                }
-              : {
-                  bottom: `${height - genreHeight * 2.5}px`,
-                  right: `${elHeight}px`,
-                  paddingTop: `${genreHeight * 2.5}px`,
-                  zIndex: 1,
-                }
-          }>
-          <div
-            className={
-              shows[0].narrowcastingTextColor2
-                ? `text-largest text-regular text-color-${shows[0].narrowcastingTextColor2}`
-                : 'text-largest text-regular text-color-Wit'
-            }>
-            DNK
-          </div>
-        </div>
-      </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };
