@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Embed } from 'semantic-ui-react';
-import '../css/poortjes.css';
+import '../css/garderobe.css';
 import '../index.css';
-import BackupPoortjes from './BackupPoortjes';
+import BackupGarderobe from './BackupGarderobe';
 
-export const Poortjes = ({ data, fallback }) => {
+export const Garderobe = ({ data, fallback }) => {
   const [shows, setShows] = useState([data]);
   let [showIndex, setShowIndex] = useState(0);
 
@@ -79,8 +78,8 @@ export const Poortjes = ({ data, fallback }) => {
               console.log(`deze show is afgelopen: ${show.name} op tijdstip: ${show.scheduleEnd}`);
               console.log(show);
 
-              show.end = 'AFGELOPEN';
-              // show.narrowcastingOriginalName = 'garderobenummers.jpg';
+              // show.end = 'AFGELOPEN';
+              show.narrowcastingOriginalName = 'garderobenummers.jpg';
             }
             // als het NU later is dan de eindtijd vd show + 30 min, laat deze dan niet meer zien.
             if (now > addMinutes(30, new Date(show.scheduleEnd))) {
@@ -349,7 +348,7 @@ export const Poortjes = ({ data, fallback }) => {
     </div>
   ) : shows[0] && hoursLeft < 4 ? (
     // Shows[showindex] reset
-    <BackupPoortjes
+    <BackupGarderobe
       shows={shows}
       layout={layout}
       elHeight={elHeight}

@@ -4,6 +4,7 @@ import { Poortjes } from './pages/Poortjes';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Colors from './pages/Colors';
+import { Garderobe } from './pages/Garderobe';
 
 function App() {
   // 1) GET DATA AND PROCESS
@@ -323,6 +324,7 @@ function App() {
             <Route path='/' element={<Dashboard />} />
             <Route path='/allevents' element={<AllEvents data={data} />} />
             <Route path='/poortjes' element={<Poortjes data={data} fallback={fallback} />} />
+            <Route path='/garderobe' element={<Garderobe data={data} fallback={fallback} />} />
             <Route path='/kleuren' element={<Colors />} />
           </Routes>
         )}
