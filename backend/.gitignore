@@ -6,6 +6,7 @@
 .pnp.js
 /temp
 /images
+/daemon
 
 # testing
 /coverage
