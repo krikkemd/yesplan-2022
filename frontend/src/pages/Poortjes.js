@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Embed } from 'semantic-ui-react';
 import '../css/poortjes.css';
 import '../index.css';
 import BackupPoortjes from './BackupPoortjes';
@@ -59,7 +58,7 @@ export const Poortjes = ({ data, fallback }) => {
   // useEffect to determine which event to show
   useEffect(() => {
     let now = new Date();
-    // let now = new Date('2022/03/03 15:42:00');
+    // let now = new Date('2022/03/03 15:42:00'); // heeft alleen met tijdstip te maken, niks met data ophalen
 
     // filter out shows with ncTonen === null and sort on show start
     setShows(
@@ -72,6 +71,7 @@ export const Poortjes = ({ data, fallback }) => {
             show.scheduleEnd !== null &&
             now > subtractMinutes(240, new Date(show.scheduleStart)) === true // show starts within 240 minutes (4 hours)
           ) {
+            // setHoursLeft(4)
             // Show eindigt binnen 5 min
             if (now > subtractMinutes(5, new Date(show.scheduleEnd))) {
               show.end = 'BINNEN 5 MIN';
@@ -207,7 +207,10 @@ export const Poortjes = ({ data, fallback }) => {
 
   // TIME BASED LOGIC END
 
-  return shows && shows.length && shows[showIndex] && hoursLeft < 4 ? (
+  return shows &&
+    shows.length &&
+    shows[showIndex] &&
+    new Date() > subtractMinutes(240, new Date(shows[showIndex]?.scheduleStart)) === true ? (
     <div>
       {/* background image + overlay */}
       <img
@@ -351,7 +354,8 @@ export const Poortjes = ({ data, fallback }) => {
         </div>
       </div>
     </div>
-  ) : shows[0] && hoursLeft < 4 ? (
+  ) : shows[0] &&
+    new Date() > subtractMinutes(240, new Date(shows[showIndex]?.scheduleStart)) === true ? (
     // Shows[showindex] reset
     <BackupPoortjes
       shows={shows}

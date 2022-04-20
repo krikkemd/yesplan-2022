@@ -212,7 +212,10 @@ export const Garderobe = ({ data, fallback }) => {
 
   // TIME BASED LOGIC END
 
-  return shows && shows.length && shows[showIndex] && hoursLeft < 4 ? (
+  return shows &&
+    shows.length &&
+    shows[showIndex] &&
+    new Date() > subtractMinutes(240, new Date(shows[showIndex]?.scheduleStart)) ? (
     <div>
       {/* background image + overlay */}
       <img
@@ -362,7 +365,7 @@ export const Garderobe = ({ data, fallback }) => {
         ''
       )}
     </div>
-  ) : shows[0] && hoursLeft < 4 ? (
+  ) : shows[0] && new Date() > subtractMinutes(240, new Date(shows[showIndex]?.scheduleStart)) ? (
     // Shows[showindex] reset
     <BackupGarderobe
       shows={shows}

@@ -39,7 +39,7 @@ function App() {
             date: `${new Date().getDate()}-${
               new Date().getMonth() + 1
             }-${new Date().getFullYear()}`,
-            // date: '24-11-2021',
+            // date: '15-4-2022',
           }),
         });
         const result = data.json();
@@ -53,7 +53,9 @@ function App() {
       .then(values => {
         console.log(values);
 
-        let date1 = new Date(values[0].data[2].defaultschedulestart);
+        // let date1 = new Date(values[0].data[2].defaultschedulestart); // waarom data[2] ????
+        // let date1 = new Date(values[0].data[2]?.defaultschedulestart);
+        let date1 = new Date(values[0].data[values[0].data?.length - 1].defaultschedulestart);
         let date2 = new Date().toLocaleTimeString('nl-NL');
 
         console.log(date1);
